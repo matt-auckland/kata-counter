@@ -17,7 +17,8 @@ export default {
     increment() {
       this.$emit("increment", this.name);
     },
-    showGoal() {
+    showGoal($event) {
+      if ($event.target.classList.contains("prevent-open")) return;
       this.show = !this.show;
     }
   },
@@ -43,15 +44,19 @@ export default {
 </script>
 
 <template>
-  <div class="button">
-    <div class="action left" @click="decrement">-</div>
-    <div class="count-name" :class="{ show: show }" @click="showGoal">
+  <div class="button" @click="showGoal">
+    <div class="action left prevent-open" @click="decrement">
+      <span class="button-icon prevent-open">-</span>
+    </div>
+    <div class="count-name" :class="{ show: show }">
       <div class="name">{{ name }}</div>
       <div class="count">{{ count }}</div>
-      <div>{{ requiredReps }}</div>
-      <div>Goal: {{ goal }}</div>
+      <div v-show="show">{{ requiredReps }}</div>
+      <div v-show="show">Goal: {{ goal }}</div>
     </div>
-    <div class="action right" @click="increment">+</div>
+    <div class="action right prevent-open" @click="increment">
+      <span class="button-icon prevent-open">+</span>
+    </div>
   </div>
 </template>
 
@@ -60,29 +65,29 @@ export default {
   user-select: none;
   border: 1px solid black;
   border-radius: 15px;
-  min-width: 50px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  max-width: 300px;
   margin: 12px 0;
+  cursor: pointer;
 }
 
 .count-name {
   transition: 320ms;
-  padding: 5px 10px;
+  margin: 5px 0;
+  padding: 0 10px;
   text-align: center;
-  height: 42px;
+  height: 36px;
   overflow: hidden;
-  cursor: pointer;
+  line-height: 18px;
 }
 
 .count-name.show {
-  height: 86px;
+  height: 72px;
 }
 
 .button .action {
-  cursor: pointer;
-  padding: 5px 10px;
+  padding: 5px 20px;
   display: flex;
   align-items: center;
 }
