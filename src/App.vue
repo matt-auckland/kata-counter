@@ -29,7 +29,7 @@ const testData = [
     count: 26
   },
   {
-    name: "Gekisai Dai ",
+    name: "Gekisai Dai Ni",
     tags: ["goju", "kaishugata"],
     count: 15
   },
@@ -150,13 +150,13 @@ export default {
     increment(kataName) {
       const kata = this.kata.filter(k => k.name === kataName)[0];
       kata.count++;
-      // TODO: Update localstorage with new value
+      this.updateStorage(this.kata);
     },
     decrement(kataName) {
       const kata = this.kata.filter(k => k.name === kataName)[0];
       if (kata.count == 0) return;
       kata.count--;
-      // TODO: Update localstorage with new value
+      this.updateStorage(this.kata);
     },
 
     calcTotalReps() {
@@ -164,9 +164,9 @@ export default {
       const reps = this.kata.map(k => ctrl.calcReps(k.reps));
       return Math.round(reps.reduce((total, rep) => total + rep, 0));
     },
-    initTestData() {
-      this.storage.setItem("kata", JSON.stringify(testData));
-      this.kata = this.storage.getItem("kata");
+    updateStorage(kataData) {
+      this.storage.setItem("kata", JSON.stringify(kataData));
+      this.kata = JSON.parse(this.storage.getItem("kata"));
       this.tagPool = new Set(this.kata.flatMap(k => k.tags));
     }
   },
@@ -174,7 +174,7 @@ export default {
     this.storage = window.localStorage;
     const kata = this.storage.getItem("kata");
 
-    if (!kata) this.initTestData();
+    if (!kata) this.updateStorage(testData);
     else {
       this.kata = JSON.parse(kata);
       this.tagPool = new Set(this.kata.flatMap(k => k.tags));
