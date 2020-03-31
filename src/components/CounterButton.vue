@@ -3,23 +3,26 @@ import moment from "moment";
 
 export default {
   name: "counter-button",
-  props: ["name", "goal", "count", "daysRemaining"],
+  props: ["name", "goal", "count", "daysRemaining", "colour", "tabs"],
   data() {
     return {
       show: false
     };
   },
   methods: {
-    decrement() {
+    decrementEvent() {
       if (this.count == 0) return;
       this.$emit("decrement", this.name);
     },
-    increment() {
+    incrementEvent() {
       this.$emit("increment", this.name);
     },
     showGoal($event) {
       if ($event.target.classList.contains("prevent-open")) return;
       this.show = !this.show;
+    },
+    editKataEvent() {
+      this.$emit("edit", this.name);
     }
   },
   computed: {
@@ -38,23 +41,48 @@ export default {
       return `${Math.ceil(
         neededReps / this.daysRemaining
       )} reps per day needed`;
+    },
+    classObject() {
+      const classes = [];
+      if (this.colour) classes.push(this.colour.toString());
+      if (this.show) classes.push("show");
+      return classes;
     }
   }
 };
 </script>
 
 <template>
-  <div class="button" @click="showGoal">
-    <div class="action left prevent-open" @click="decrement">
+  <div
+    class="button"
+    :class="classObject"
+    @click="showGoal"
+  >
+    <div
+      class="action left prevent-open"
+      @click="decrementEvent"
+    >
       <span class="button-icon prevent-open">-</span>
     </div>
-    <div class="count-name" :class="{ show: show }">
+    <div
+      class="tab"
+      v-for="(tab, i) in tabs"
+      :key="tab + i"
+      :style="{left: `${12 + (4 * i)}%`}"
+    ></div>
+    <div class="count-name">
       <div class="name">{{ name }}</div>
       <div class="count">{{ count }}</div>
-      <div v-show="show">{{ requiredReps }}</div>
-      <div v-show="show">Goal: {{ goal }}</div>
+      <template v-show="show">
+        <div>{{ requiredReps }}</div>
+        <div>Goal: {{ goal }}</div>
+        <button @click.prevent="editKataEvent">Edit</button>
+      </template>
     </div>
-    <div class="action right prevent-open" @click="increment">
+    <div
+      class="action right prevent-open"
+      @click="incrementEvent"
+    >
       <span class="button-icon prevent-open">+</span>
     </div>
   </div>
@@ -63,13 +91,27 @@ export default {
 <style scoped>
 .button {
   user-select: none;
-  border: 1px solid black;
+  border: 1px solid var(--base-font-colour);
   border-radius: 15px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin: 12px 0;
   cursor: pointer;
+  position: relative;
+}
+
+.tab {
+  position: absolute;
+  background: black;
+  height: 46px;
+  width: 15px;
+  top: 0;
+  transition: 320ms;
+}
+
+.show .tab {
+  height: 102px;
 }
 
 .count-name {
@@ -82,8 +124,8 @@ export default {
   line-height: 18px;
 }
 
-.count-name.show {
-  height: 72px;
+.show .count-name {
+  height: 92px;
 }
 
 .button .action {
@@ -102,5 +144,65 @@ export default {
 
 .button .action:hover {
   font-weight: bold;
+}
+
+.white {
+  color: black;
+  border-color: black;
+  background: rgb(233, 233, 233);
+}
+
+.blue {
+  color: #fff;
+  border-color: var(--blue);
+  background: var(--blue);
+}
+
+.dark-blue {
+  color: #fff;
+  border-color: var(--dark-blue);
+  background: var(--dark-blue);
+}
+
+.yellow {
+  color: black;
+  border-color: var(--yellow);
+  background: var(--yellow);
+}
+
+.dark-yellow {
+  color: #fff;
+  border-color: var(--dark-yellow);
+  background: var(--dark-yellow);
+}
+
+.green {
+  color: #fff;
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.dark-green {
+  color: #fff;
+  border-color: var(--dark-green);
+  background: var(--dark-green);
+}
+
+.brown {
+  color: #fff;
+  border-color: var(--brown);
+  background: var(--brown);
+}
+
+.dark-brown {
+  color: #fff;
+  border-color: var(--dark-brown);
+  background: var(--dark-brown);
+}
+
+.black {
+  color: #fff;
+  border-color: var(--black);
+  background: var(--black);
 }
 </style>
