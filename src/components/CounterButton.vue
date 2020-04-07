@@ -68,7 +68,7 @@ export default {
       class="tab"
       v-for="(tab, i) in tabs"
       :key="tab + i"
-      :style="{left: `${12 + (4 * i)}%`}"
+      :style="{left: `${55 + (20 * i)}px`}"
     ></div>
     <div class="count-name">
       <div class="name">{{ name }}</div>
@@ -150,6 +150,30 @@ export default {
   color: black;
   border-color: black;
   background: rgb(233, 233, 233);
+}
+
+.purple {
+  color: #fff;
+  border-color: var(--purple);
+  background: var(--purple);
+}
+
+.red {
+  color: #fff;
+  border-color: var(--red);
+  background: var(--red);
+}
+
+.orange {
+  color: #fff;
+  border-color: var(--orange);
+  background: var(--orange);
+}
+
+.grey {
+  color: #fff;
+  border-color: var(--grey);
+  background: var(--grey);
 }
 
 .blue {

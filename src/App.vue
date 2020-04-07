@@ -26,14 +26,28 @@
 
     <!-- Settings Page -->
     <template v-if="tab == 'SETTINGS'">
-      settings
+      <div>
+        <form action="() => {}">
+          <label for="defaultgoal">Default Goal Reps<input
+              @change="updateGlobalGoal"
+              type="number"
+            ></label>
+          <label for="defaultenddate">Default Goal End Date<input
+              @change="updateGlobalGoalDate"
+              type="date"
+            ></label>
+          <button @click.prevent="exportData">Export data as JSON</button>
+          <button @click.prevent="loadData">Import data from JSON</button>
+          <button @click.prevent="loadSampleData">Load sample data</button>
+        </form>
+      </div>
     </template>
 
     <!-- Counters Page -->
     <template v-else-if="tab == 'COUNTERS'">
       <counter-button
         v-show="!filterTag || k.tags.includes(filterTag)"
-        v-for="k in kata"
+        v-for="k in kataList"
         :key="k.name"
         @increment="increment"
         @decrement="decrement"
@@ -84,11 +98,19 @@
           ></div>
         </div>
         <label for="tabs">
-          <span>Tabs:</span>
+          <span>Belt Tabs:</span>
           <input
             type="number"
             name="tabs"
             v-model.number="selectedKata.tabs"
+          ></label>
+
+        <label for="tags">
+          <span>Belt Tabs:</span>
+          <input
+            type="text"
+            name="tags"
+            v-model="selectedKata.tags"
           ></label>
 
         <button @click.prevent="saveKata">Save</button>
@@ -246,25 +268,34 @@ export default {
     }
   },
   methods: {
+    // kata counter
     increment(kataName) {
-      const kata = this.kata.filter(k => k.name === kataName)[0];
+      const kata = this.kataList.filter(k => k.name === kataName)[0];
       kata.count++;
-      this.updateStorage(this.kata);
+      this.updateStorage(this.kataList);
     },
     decrement(kataName) {
-      const kata = this.kata.filter(k => k.name === kataName)[0];
+      const kata = this.kataList.filter(k => k.name === kataName)[0];
       if (kata.count == 0) return;
       kata.count--;
-      this.updateStorage(this.kata);
+      this.updateStorage(this.kataList);
     },
     editKata(kataName) {
-      const kata = this.kata.filter(k => k.name === kataName)[0];
+      const kata = this.kataList.filter(k => k.name === kataName)[0];
       if (kata.count == 0) return;
       this.selectedKata = kata;
       this.tab = "EDIT";
     },
+
+    // editing kata
     saveKata() {
-      this.updateStorage(this.kata);
+      this.kataList = this.kataList.map(k => {
+        if (typeof k.tags == "string") {
+          k.tags = k.tags.split(",").filter(tag => tag);
+        }
+        return k;
+      });
+      this.updateStorage(this.kataList);
       this.goBack();
     },
     goBack() {
@@ -280,15 +311,13 @@ export default {
     },
     calcTotalReps() {
       const ctrl = this;
-      const reps = this.kata.map(k => ctrl.calcReps(k.reps));
+      const reps = this.kataList.map(k => ctrl.calcReps(k.reps));
       return Math.round(reps.reduce((total, rep) => total + rep, 0));
     },
     updateStorage(kataData) {
-      // eslint-disable-next-line no-debugger
-      debugger;
       this.storage.setItem("kata", JSON.stringify(kataData));
-      this.kata = JSON.parse(this.storage.getItem("kata"));
-      this.tagPool = new Set(this.kata.flatMap(k => k.tags));
+      this.kataList = JSON.parse(this.storage.getItem("kata"));
+      this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
     },
     selectColour(colour) {
       this.selectedKata.colour = colour;
@@ -302,6 +331,24 @@ export default {
         classes.push("selected-colour");
       }
       return classes;
+    },
+
+    // Settings Page
+
+    loadData() {
+      console.log("loadData");
+    },
+    loadSampleData() {
+      console.log("loadSampleData");
+    },
+    exportData() {
+      console.log("exportData");
+    },
+    updateGlobalGoal() {
+      console.log("updateGlobalGoal");
+    },
+    updateGlobalGoalDate() {
+      console.log("updateGlobalGoalDate");
     }
   },
   created() {
@@ -310,8 +357,8 @@ export default {
 
     if (!kata) this.updateStorage(testData);
     else {
-      this.kata = JSON.parse(kata);
-      this.tagPool = new Set(this.kata.flatMap(k => k.tags));
+      this.kataList = JSON.parse(kata);
+      this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
     }
     this.daysRemaining = this.endDate.diff(this.startDate, "days");
   },
@@ -325,20 +372,30 @@ export default {
       filterTag: false,
       goal: 100,
       selectedKata: null,
-      kata: null,
+      kataList: null,
       // SETTINGS, COUNTERS, EDIT
       tab: "COUNTERS",
       colours: [
-        "white",
-        "blue",
-        "dark-blue",
-        "yellow",
-        "dark-yellow",
-        "green",
-        "dark-green",
+        "purple",
+        "red",
+        "orange",
         "brown",
-        "dark-brown",
-        "black"
+        "yellow",
+        "blue",
+        "green",
+        "black",
+        "white",
+        "grey"
+        // "white",
+        // "blue",
+        // "dark-blue",
+        // "yellow",
+        // "dark-yellow",
+        // "green",
+        // "dark-green",
+        // "brown",
+        // "dark-brown",
+        // "black"
       ]
     };
   }
@@ -356,9 +413,36 @@ export default {
   --dark-yellow: #d8d50b;
   --green: #34bd29;
   --dark-green: #1e8616;
-  --brown: #b38108;
+  --brown: #522c1d;
   --dark-brown: #8c6315;
   --black: #000;
+
+  --new-purple: #37114f;
+  --new-red: #e8112d;
+  --new-orange: #f28411;
+  --new-brown: #9e6b05;
+  --new-yellow: #f9e526;
+  --new-blue: #0051ba;
+  --new-green: #009e49;
+  --new-black: #111111;
+  --new-white: #fff;
+  --new-grey: #686663;
+
+  --material-red: #d50000;
+  --material-blue: #1565c0;
+  --material-purple: #6a1b9a;
+  --material-yellow: #ffeb3b;
+  --material-orange: #f57f17;
+  --material-brown: #3e2723;
+  --material-green: #1b5e20;
+
+  --red: var(--material-red);
+  --blue: var(--material-blue);
+  --purple: var(--material-purple);
+  --yellow: var(--material-yellow);
+  --orange: var(--material-orange);
+  /* --brown: var(--material-brown); */
+  --green: var(--material-green);
 }
 
 body {
@@ -397,9 +481,10 @@ body {
 form {
   display: flex;
   flex-direction: column;
-  max-width: 300px;
+  max-width: 320px;
   margin: auto;
 }
+
 form > * {
   margin: 8px 0;
 }
@@ -414,6 +499,7 @@ label {
   border-radius: 100%;
   margin: 5px 16px;
   display: block;
+  box-shadow: 0px 0px 0px 1px black;
 }
 
 .colour-container {
@@ -466,5 +552,21 @@ label {
 
 .colour-circle.black {
   background: var(--black);
+}
+
+.colour-circle.purple {
+  background: var(--purple);
+}
+
+.colour-circle.red {
+  background: var(--red);
+}
+
+.colour-circle.orange {
+  background: var(--orange);
+}
+
+.colour-circle.grey {
+  background: var(--grey);
 }
 </style>
