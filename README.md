@@ -1,11 +1,14 @@
 # kata-counter
 
-Cordova App for recording kata repetitions and goals.
+Cordova App for recording kata repetitions and goals. It will display how many reps you need to do per week/day to meet your goal.
 
 ## Features
 
 - Filter kata by tags
-- Add/remove tags (TODO)
+- Display reps needed per day/week to achieve goal
+- Displays total reps for all kata 
+- Total reps display will respect the current filtered kata (TODO)
+- Add/remove tags
 - Add new kata (TODO)
 - Edit existing kata
 - Pick a goal # of reps
@@ -19,7 +22,7 @@ Cordova App for recording kata repetitions and goals.
 ## Misc todos
 
 - Improve overall design
-- Add more belt colours
+- ~~Add more belt colours~~
 
 ## Development
 
