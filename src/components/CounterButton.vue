@@ -3,7 +3,7 @@ import moment from "moment";
 
 export default {
   name: "counter-button",
-  props: ["name", "goal", "count", "daysRemaining", "colour", "tabs"],
+  props: ["name", "goalReps", "reps", "daysRemaining", "colour", "tabs"],
   data() {
     return {
       show: false
@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     decrementEvent() {
-      if (this.count == 0) return;
+      if (this.reps == 0) return;
       this.$emit("decrement", this.name);
     },
     incrementEvent() {
@@ -28,7 +28,7 @@ export default {
   computed: {
     requiredReps() {
       // calc days left
-      const neededReps = this.goal - this.count;
+      const neededReps = Number.parseInt(this.goalReps) - this.reps;
       if (neededReps <= 0) return `Goal complete`;
 
       if (this.daysRemaining > 60) {
@@ -72,10 +72,10 @@ export default {
     ></div>
     <div class="count-name">
       <div class="name">{{ name }}</div>
-      <div class="count">{{ count }}</div>
+      <div class="count">{{ reps }}</div>
       <template v-show="show">
         <div>{{ requiredReps }}</div>
-        <div>Goal: {{ goal }}</div>
+        <div>Goal: {{ goalReps }}</div>
         <button @click.prevent="editKataEvent">Edit</button>
       </template>
     </div>
@@ -108,6 +108,10 @@ export default {
   width: 15px;
   top: 0;
   transition: 320ms;
+}
+
+.black .tab {
+  background: gold;
 }
 
 .show .tab {
