@@ -6,18 +6,19 @@ Cordova App for recording kata repetitions and goals. It will display how many r
 
 - Filter kata by tags
 - Display reps needed per day/week to achieve goal
-- Displays total reps for all kata 
+- Displays total reps for all kata ~~(TODO)~~
 - Total reps display will respect the current filtered kata (TODO)
 - Add/remove tags
-- Add new kata (TODO)
+- Add new kata ~~(TODO)~~
 - Edit existing kata
 - Pick a goal # of reps
-- Pick a goal date (TODO)
+- Pick a goal date ~~(TODO)~~
 - Pick a colour, add belt tabs (specify what belt the kata is for)
+- Populate app with premade kata lists
 - Import/export JSON data (TODO)
 - Uses local storage to record data (probably moving to proper on device storage eventually)
 - Records the date/time of the last counter update (TODO)
-- Global settings and per kata settings (TODO)
+- Global settings and per kata settings ~~(TODO)~~
 
 ## Misc todos
 
