@@ -230,7 +230,7 @@ export default {
     },
 
     importTestKata() {
-      this.updateStorage(templateKata.testData);
+      this.updateStorage(templateKata.testData.kata);
     },
 
     // editing kata
@@ -252,10 +252,11 @@ export default {
       this.selectedKata = null;
     },
     deleteKata(kata) {
-      if (kata && kata.id) {
+      if (kata && !Number.isNaN(kata.id)) {
         for (let i = 0; i < this.kataList.length; i++) {
-          if (this.kataList[i].id == kata.id)
-            this.selectedTemplateKata.splice(i, 1);
+          if (this.kataList[i].id == kata.id) {
+            this.kataList.splice(i, 1);
+          }
         }
       }
 
@@ -362,7 +363,7 @@ export default {
       kataList: null,
 
       settings: {
-        pretendNoKata: true,
+        pretendNoKata: false,
         endDate: moment("2021-01-01", "YYYY-MM-DD"),
         defaultRepsGoal: 100
       },
