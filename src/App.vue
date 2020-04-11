@@ -33,6 +33,7 @@
       <SettingsPage
         :settings="settings"
         @updateSetting="updateSetting"
+        @updateModal="updateModalState"
       />
     </template>
 
@@ -69,68 +70,102 @@
     </template>
 
     <!-- MODAL  -->
-    <div
-      class="slide-up-modal"
-      :class="{'visible': modal.state != 'HIDE'}"
-      @click="hideModal($event, true)"
+    <transition
+      name="modal-wrapper"
+      v-on:after-enter="triggerSlideUpModal"
     >
-      <div class="slide-up-modal-body">
-        <h2>{{modal.title}}</h2>
-        <button
-          class="close-button"
-          @click="hideModal"
-        >+</button>
+      <div
+        class="slide-up-modal"
+        v-if="modal.state != 'HIDE'"
+        @click="hideModal($event, true)"
+      >
+        <transition
+          :name="'modal-transition'"
+          @after-leave="modalBodyAfterLeave"
+        >
+          <div
+            v-if="modal.showSlideUp"
+            class="slide-up-modal-body"
+          >
+            <h2>{{modal.title}}</h2>
+            <button
+              class="close-button"
+              @click="hideModal"
+            >+</button>
 
-        <template v-if="modal.state == 'ADD-KATA'">
-          <KataEditor
-            @saveKata="saveKata($event, true)"
-            @cancelEdit="cancelEdit"
-          />
+            <template v-if="modal.state == 'ADD-KATA'">
+              <KataEditor
+                @saveKata="saveKata($event, true)"
+                @cancelEdit="cancelEdit"
+              />
+            </template>
+
+            <template v-if="modal.state == 'EDIT-KATA'">
+              <KataEditor
+                @saveKata="saveKata"
+                @cancelEdit="cancelEdit"
+                @deleteKata="deleteKata($event)"
+                :targetKata="selectedKata"
+              />
+            </template>
+
+            <template v-else-if="modal.state == 'IMPORT-JSON'">
+              <div class="flex-col-center">
+                <p>Paste in your JSON below</p>
+                <textarea
+                  v-model="kataJSON"
+                  cols="30"
+                  rows="10"
+                />
+                <button @click="importFromJSON">Import Kata</button>
+              </div>
+          </template>
+
+
+          <template v-else-if="modal.state == 'EXPORT-JSON'">
+            <div class="flex-col-center">
+            <p>Copy this JSON text and save it somewhere to back up your data</p>
+            <textarea
+              v-model="kataJSON"
+              cols="30"
+              rows="10"
+              readonly
+            />
+            <button @click="hideModal">Close</button>
+            </div>
         </template>
 
-        <template v-if="modal.state == 'EDIT-KATA'">
-          <KataEditor
-            @saveKata="saveKata"
-            @cancelEdit="cancelEdit"
-            :targetKata="selectedKata"
-          />
+
+          <template v-else-if="modal.state == 'LOAD-TEMPLATE-DATA'">
+            <p>
+              Check the box by each kata's name to select it, then press continue to confirm your selection.
+            </p>
+
+            <form>
+              <div class="template-kata-container">
+                <div v-for="template in filteredTemplateKata" :key="template.name">
+                  {{template.name}}
+                  <hr>
+                  <label class="flex-label" v-for="kata in template.kata" :key="kata.name" :for="kata.name">
+                    {{kata.name}}<input type="checkbox" :name="kata.name" id="">
+                  </label>  
+                </div>
+              </div>
+              <div>
+                <button>Cancel</button>
+                <button :disabled="selectedTemplateKata.length < 1">Continue</button>
+              </div>
+            </form>
+          </template>
+
+
+          <template v-else-if="modal.state == 'TEST'">
+          <p>test</p>
         </template>
-
-        <template v-else-if="modal.state == 'IMPORT-JSON'">
-          <p>Paste in your JSON below</p>
-          <textarea
-            v-model="kataJSON"
-            cols="30"
-            rows="10"
-          />
-          <button @click="importFromJSON">Import Kata</button>
-        </template>
-
-
-        <template v-else-if="modal.state == 'LOAD-TEMPLATE-DATA'">
-          <p>
-            There are a few templates to choose from, click to see and a list of the kata and confirm your choice.
-          </p>
-
-          <form>
-            <UIChip :checked="selectedTemplateKata.includes('goju')" @click="updateSelectedTemplateKata('goju')">Goju Ryu Kata</UIChip>
-            <UIChip :checked="selectedTemplateKata.includes('shotokan')" @click="updateSelectedTemplateKata('shotokan')">Shotokan Kata</UIChip>
-            <UIChip :checked="selectedTemplateKata.includes('kobudo')" @click="updateSelectedTemplateKata('kobudo')">Kobudo Kata</UIChip>
-          <div>
-          <button>Cancel</button>
-          <button :disabled="selectedTemplateKata.length < 1">Continue</button>
-
-          </div>
-          </form>
-        </template>
-
-
-        <template v-else-if="modal.state == 'TEST'">
-
-        </template>
-
-      </div>
+        </div>
+      </transition>
     </div>
+      </transition>
   </div>
 </template>
 
@@ -142,15 +177,15 @@ import templateKata from "./assets/templateKata.js";
 import CounterButton from "./components/CounterButton.vue";
 import KataEditor from "./components/KataEditor.vue";
 import SettingsPage from "./components/SettingsPage.vue";
-import UIChip from "./components/UIChip.vue";
+// // import UIChip from "./components/UIChip.vue";
 
 export default {
   name: "App",
   components: {
     CounterButton,
     SettingsPage,
-    KataEditor,
-    UIChip
+    KataEditor
+    // UIChip
   },
   filters: {
     capitalize(str) {
@@ -216,6 +251,18 @@ export default {
       this.hideModal();
       this.selectedKata = null;
     },
+    deleteKata(kata) {
+      if (kata && kata.id) {
+        for (let i = 0; i < this.kataList.length; i++) {
+          if (this.kataList[i].id == kata.id)
+            this.selectedTemplateKata.splice(i, 1);
+        }
+      }
+
+      this.updateStorage(this.kataList);
+      this.hideModal();
+      this.selectedKata = null;
+    },
 
     cancelEdit() {
       this.hideModal();
@@ -252,6 +299,12 @@ export default {
       ) {
         return;
       }
+      this.modal.showSlideUp = false;
+    },
+    triggerSlideUpModal() {
+      this.modal.showSlideUp = true;
+    },
+    modalBodyAfterLeave() {
       this.updateModalState("hide");
     },
 
@@ -275,6 +328,13 @@ export default {
     }
   },
   computed: {
+    filteredTemplateKata() {
+      const clone = JSON.parse(JSON.stringify(templateKata));
+
+      delete clone.testData;
+
+      return clone;
+    },
     totalKataReps() {
       if (!this.kataList || this.kataList.length < 1) return 0;
       return this.kataList.reduce((sum, k) => Number.parseInt(k.reps) + sum, 0);
@@ -291,6 +351,7 @@ export default {
 
     this.daysRemaining = this.settings.endDate.diff(moment(), "days");
   },
+
   data() {
     return {
       storage: null, // localStorage reference
@@ -301,14 +362,15 @@ export default {
       kataList: null,
 
       settings: {
-        pretendNoKata: false,
+        pretendNoKata: true,
         endDate: moment("2021-01-01", "YYYY-MM-DD"),
         defaultRepsGoal: 100
       },
 
       modal: {
         state: "HIDE",
-        title: ""
+        title: "",
+        showSlideUp: false
       },
 
       selectedTemplateKata: [],
@@ -423,13 +485,26 @@ form > * {
   margin: 8px 0;
 }
 
-label {
+.flex-label {
   display: flex;
+  justify-content: space-between;
+}
+
+.flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.template-kata-container {
+  overflow-y: scroll;
+  max-height: 320px;
 }
 
 /* Modal */
 .slide-up-modal {
-  visibility: hidden;
+  height: 100vh;
+  width: 100vw;
   position: absolute;
   left: 0;
   top: 0;
@@ -442,14 +517,20 @@ label {
   overflow: hidden;
 }
 
-.slide-up-modal.visible {
-  visibility: visible;
-  height: 100vh;
-  width: 100vw;
+.modal-wrapper-enter,
+.modal-wrapper-leave-to {
+  opacity: 0;
 }
 
-.slide-up-modal.visible .slide-up-modal-body {
-  transform: translateY(0);
+.slide-up-modal-body {
+  position: relative;
+  background: white;
+  color: #333;
+  border-radius: 50px 50px 0 0;
+  min-height: 50%;
+  max-width: 460px;
+  width: 100%;
+  padding: 10px 20px;
 }
 
 .slide-up-modal-body .close-button {
@@ -463,20 +544,21 @@ label {
   transform: rotate(45deg);
 }
 
-.slide-up-modal-body {
-  transition: 800ms;
-  transform: translateY(100%);
-  background: white;
-  color: #333;
-  border-radius: 50px 50px 0 0;
-  min-height: 50%;
-  max-width: 460px;
-  width: 100%;
-  padding: 10px 20px;
+.modal-transition-enter-active {
+  transform: translateY(0);
 }
 
-.flex-label {
-  display: flex;
-  justify-content: space-between;
+.modal-transition-leave-active,
+.modal-transition-enter-active {
+  transition: 600ms;
+}
+
+.modal-transition-leave-active {
+  transform: translateY(100%);
+}
+
+.modal-transition-enter,
+.modal-transition-leave-to {
+  transform: translateY(100%);
 }
 </style>

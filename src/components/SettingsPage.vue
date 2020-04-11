@@ -26,9 +26,10 @@
         v-model="settingsClone.pretendNoKata"
         @input="updateSetting('pretendNoKata', !settingsClone.pretendNoKata)"
       ></label>
-    <button @click.prevent="loadSampleData">Load sample data</button>
-    <button @click.prevent="exportData">Export data as JSON</button>
-    <button @click.prevent="loadData">Import data from JSON</button>
+    <button @click.prevent="emitUpdateModal('export-json', 'Export Kata as JSON')">Export data as JSON</button>
+    <button @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load kata from a template</button>
+    <button @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a kata</button>
+    <button @click.prevent="emitUpdateModal('import-json', 'Import Kata JSON Data')">Import kata from JSON</button>
   </form>
 </template>
 
@@ -64,6 +65,9 @@ export default {
       this.settingsClone.endDate = moment(this.settingsClone.endDate).format(
         "YYYY-MM-DD"
       );
+    },
+    emitUpdateModal(key, title) {
+      this.$emit("updateModal", key, title);
     }
   }
 };

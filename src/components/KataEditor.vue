@@ -104,10 +104,10 @@
       ></label>
 
     <button @click.prevent="saveKata">Save</button>
-    <button @click="cancelEdit">Cancel</button>
+    <button @click.prevent="cancelEdit">Cancel</button>
     <button
       v-if="targetKata"
-      @click.prevent="cancelEdit"
+      @click.prevent="deleteKata"
     >Delete Kata</button>
   </form>
 </template>
@@ -126,6 +126,9 @@ export default {
     },
     saveKata() {
       this.$emit("saveKata", this.draftKata);
+    },
+    deleteKata() {
+      this.$emit("deleteKata", this.draftKata);
     },
     kataColourClass(colour) {
       const classes = [];
