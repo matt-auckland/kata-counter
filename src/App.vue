@@ -63,8 +63,7 @@
 
       <template v-else>
         <CounterButton
-          v-show="!filterTag || k.tags.includes(filterTag)"
-          v-for="k in kataList"
+          v-for="k in filteredKataList"
           :key="k.name"
           @increment="increment"
           @decrement="decrement"
@@ -126,12 +125,12 @@
             <template v-else-if="modal.state == 'IMPORT-JSON'">
               <div class="flex-col-center">
                 <p>Paste in your JSON below</p>
-                <textarea
-                  v-model="kataJSON"
-                  cols="30"
-                  rows="10"
-                />
-                <button @click="importFromJSON">Import Kata</button>
+                <p
+                  class="error-text"
+                  v-if="kataJSONError"
+                >{{kataJSONError}}</p>
+                <textarea v-model="kataJSON" />
+                <button :disabled="kataJSON.length > 0" @click="importFromJSON">Import Kata</button>
               </div>
             </template>
 
@@ -267,19 +266,20 @@ export default {
     },
 
     importFromJSON() {
-      const parsedKata = JSON.parse(this.kataJSON);
-      this.updateStorage(parsedKata);
-    },
+      this.kataJSONError = "";
 
-    // updateSelectedTemplateKata(kataListName) {
-    //   const index = this.selectedTemplateKata.indexOf(kataListName);
-    //   if (index == -1) {
-    //     this.selectedTemplateKata.push(kataListName);
-    //   } else {
-    //     this.selectedTemplateKata.splice(index, 1);
-    //   }
-    //   console.log(this.selectedTemplateKata);
-    // },
+      const vm = this;
+      let parsedKata;
+
+      try {
+        parsedKata = JSON.parse(vm.kataJSON);
+        this.updateStorage(parsedKata);
+        this.kataJSON = "";
+        this.hideModal();
+      } catch (e) {
+        this.kataJSONError = "Invalid JSON data. Did you copy-paste correctly?";
+      }
+    },
 
     importTemplateKata() {
       if (this.selectedTemplateKata.length) {
@@ -402,6 +402,11 @@ export default {
     }
   },
   computed: {
+    filteredKataList() {
+      if (!this.filterTag) return this.kataList;
+
+      return this.kataList.filter(k => k.tags.includes(this.filterTag));
+    },
     filteredTemplateKata() {
       const clone = JSON.parse(JSON.stringify(templateKata));
 
@@ -410,8 +415,11 @@ export default {
       return clone;
     },
     totalKataReps() {
-      if (!this.kataList || this.kataList.length < 1) return 0;
-      return this.kataList.reduce((sum, k) => Number.parseInt(k.reps) + sum, 0);
+      if (!this.filteredKataList || this.filteredKataList.length < 1) return 0;
+      return this.filteredKataList.reduce(
+        (sum, k) => Number.parseInt(k.reps) + sum,
+        0
+      );
     },
     kataJSONExport() {
       return JSON.stringify(this.kataList);
@@ -453,7 +461,8 @@ export default {
       importTemplateKataStage: 1,
       selectedTemplateKata: [],
       selectedKata: null,
-      kataJSON: null,
+      kataJSON: "",
+      kataJSONError: "",
 
       //  Tab names: SETTINGS, COUNTERS
       tab: "COUNTERS"
@@ -608,6 +617,10 @@ form > * {
   text-align: left;
 }
 
+.error-text {
+  color: red;
+}
+
 /* Modal */
 .slide-up-modal {
   height: 100vh;
@@ -657,7 +670,7 @@ form > * {
 
 .modal-transition-leave-active,
 .modal-transition-enter-active {
-  transition: 600ms;
+  transition: 200ms;
 }
 
 .modal-transition-leave-active {

@@ -26,10 +26,10 @@
         v-model="settingsClone.pretendNoKata"
         @input="updateSetting('pretendNoKata', !settingsClone.pretendNoKata)"
       ></label>
+    <button @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a Kata</button>
+    <button @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load Kata from a template</button>
+    <button @click.prevent="emitUpdateModal('import-json', 'Import Kata JSON Data')">Import Kata from JSON</button>
     <button @click.prevent="emitUpdateModal('export-json', 'Export Kata as JSON')">Export data as JSON</button>
-    <button @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load kata from a template</button>
-    <button @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a kata</button>
-    <button @click.prevent="emitUpdateModal('import-json', 'Import Kata JSON Data')">Import kata from JSON</button>
   </form>
 </template>
 
@@ -47,7 +47,6 @@ export default {
     settings: {
       deep: true,
       handler() {
-        console.log("load", this.settings.pretendNoKata);
         this.loadSettings();
       }
     }
@@ -57,7 +56,6 @@ export default {
   },
   methods: {
     updateSetting(key, data) {
-      console.log("emit", key, data);
       this.$emit("updateSetting", key, data);
     },
     loadSettings() {
