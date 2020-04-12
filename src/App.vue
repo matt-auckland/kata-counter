@@ -68,16 +68,13 @@
           @increment="increment"
           @decrement="decrement"
           @edit="beginEditKata"
-          :name="k.name"
+          :kata="k"
           :goalReps="k.defaultGoalReps ? settings.defaultRepsGoal : k.goalReps"
-          :reps="k.reps"
           :daysRemaining="
             k.defaultGoalDate
               ? daysRemaining
               : k.goalDate.diff(moment(), 'days')
           "
-          :colour="k.colour ? k.colour : ''"
-          :tabs="k.tabs"
         ></CounterButton>
       </template>
     </template>
@@ -235,7 +232,6 @@ import templateKata from "./assets/templateKata.js";
 import CounterButton from "./components/CounterButton.vue";
 import KataEditor from "./components/KataEditor.vue";
 import SettingsPage from "./components/SettingsPage.vue";
-// // import UIChip from "./components/UIChip.vue";
 
 export default {
   name: "App",
@@ -243,7 +239,6 @@ export default {
     CounterButton,
     SettingsPage,
     KataEditor
-    // UIChip
   },
   filters: {
     capitalize(str) {
@@ -253,15 +248,17 @@ export default {
   },
   methods: {
     // kata counter
-    increment(kataName) {
-      const kata = this.kataList.filter(k => k.name === kataName)[0];
+    increment(kataId) {
+      const kata = this.kataList.filter(k => k.id === kataId)[0];
       kata.reps++;
+      kata.lastUpdated = moment();
       this.updateStorage(this.kataList);
     },
-    decrement(kataName) {
-      const kata = this.kataList.filter(k => k.name === kataName)[0];
+    decrement(kataId) {
+      const kata = this.kataList.filter(k => k.id === kataId)[0];
       if (kata.reps == 0) return;
       kata.reps--;
+      kata.lastUpdated = moment();
       this.updateStorage(this.kataList);
     },
 
@@ -289,8 +286,8 @@ export default {
       }
     },
 
-    beginEditKata(kataName) {
-      const kata = this.kataList.filter(k => k.name === kataName)[0];
+    beginEditKata(kataId) {
+      const kata = this.kataList.filter(k => k.name == kataId)[0];
       if (!kata) return;
       this.selectedKata = kata;
       this.updateModalState("edit-kata", `Editing ${kata.name}`);
@@ -305,6 +302,9 @@ export default {
       if (typeof draftKata.tags == "string") {
         draftKata.tags = draftKata.tags.split(",").filter(tag => tag);
       }
+      draftKata.lastUpdated = moment();
+
+      if (!draftKata.id) draftKata.id = Date.now();
 
       if (isNewKata) {
         this.kataList.push(draftKata);
@@ -337,9 +337,6 @@ export default {
       this.selectedKata = null;
     },
 
-    goBack() {
-      this.selectedKata = null;
-    },
     toggleSettings() {
       if (this.tab != "COUNTERS") {
         this.tab = "COUNTERS";
@@ -389,16 +386,7 @@ export default {
     updateSetting(key, data) {
       if (key == "endDate") data = moment(data);
 
-      console.log(
-        `update setting: ${key} with ${data}. Currently: ${this.settings[key]}`
-      );
       this.settings[key] = data;
-    },
-    loadData() {
-      console.log("loadData");
-    },
-    loadSampleData() {
-      console.log("loadSampleData");
     }
   },
   computed: {
@@ -426,6 +414,8 @@ export default {
     }
   },
   created() {
+    this.daysRemaining = this.settings.endDate.diff(moment(), "days");
+
     this.storage = window.localStorage;
     const kata = this.storage.getItem("kata");
 
@@ -433,8 +423,6 @@ export default {
       this.kataList = JSON.parse(kata);
       this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
     }
-
-    this.daysRemaining = this.settings.endDate.diff(moment(), "days");
   },
 
   data() {

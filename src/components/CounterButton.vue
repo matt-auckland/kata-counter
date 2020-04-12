@@ -3,7 +3,7 @@ import moment from "moment";
 
 export default {
   name: "counter-button",
-  props: ["name", "goalReps", "reps", "daysRemaining", "colour", "tabs"],
+  props: ["goalReps", "daysRemaining", "kata"],
   data() {
     return {
       show: false
@@ -11,40 +11,47 @@ export default {
   },
   methods: {
     decrementEvent() {
-      if (this.reps == 0) return;
-      this.$emit("decrement", this.name);
+      if (this.kata.reps == 0) return;
+      this.$emit("decrement", this.kata.id);
     },
     incrementEvent() {
-      this.$emit("increment", this.name);
+      this.$emit("increment", this.kata.id);
     },
     showGoal($event) {
       if ($event.target.classList.contains("prevent-open")) return;
       this.show = !this.show;
     },
     editKataEvent() {
-      this.$emit("edit", this.name);
+      this.$emit("edit", this.kata.id);
     }
   },
   computed: {
     requiredReps() {
       // calc days left
-      const neededReps = Number.parseInt(this.goalReps) - this.reps;
+      const neededReps = Number.parseInt(this.goalReps) - this.kata.reps;
       if (neededReps <= 0) return `Goal complete`;
+      if (this.daysRemaining == 0) return `${neededReps} reps per day`;
 
       if (this.daysRemaining > 60) {
         const weeksRemaining = moment
           .duration(this.daysRemaining, "days")
           .asWeeks();
-        return `${Math.ceil(neededReps / weeksRemaining)} reps per week needed`;
+        return `${Math.ceil(neededReps / weeksRemaining)} reps per week`;
       }
 
-      return `${Math.ceil(
-        neededReps / this.daysRemaining
-      )} reps per day needed`;
+      return `${Math.ceil(neededReps / this.daysRemaining)} reps per day`;
+    },
+    lastUpdatedString() {
+      if (this.kata.lastUpdated) {
+        return `Last Updated: ${moment(this.kata.lastUpdated).format(
+          "HH:mm:ss, D/MM/YYYY"
+        )}`;
+      }
+      return "Never updated";
     },
     classObject() {
       const classes = [];
-      if (this.colour) classes.push(this.colour.toString());
+      if (this.kata.colour) classes.push(this.kata.colour.toString());
       if (this.show) classes.push("show");
       return classes;
     }
@@ -66,16 +73,17 @@ export default {
     </div>
     <div
       class="tab"
-      v-for="(tab, i) in tabs"
+      v-for="(tab, i) in kata.tabs"
       :key="tab + i"
       :style="{left: `${55 + (20 * i)}px`}"
     ></div>
     <div class="count-name">
-      <div class="name">{{ name }}</div>
-      <div class="count">{{ reps }}</div>
+      <div class="name">{{ kata.name }}</div>
+      <div class="count">{{ kata.reps }}</div>
       <template v-show="show">
         <div>{{ requiredReps }}</div>
         <div>Goal: {{ goalReps }}</div>
+        <div>{{ lastUpdatedString }}</div>
         <button @click.prevent="editKataEvent">Edit</button>
       </template>
     </div>
@@ -125,11 +133,18 @@ export default {
   text-align: center;
   height: 36px;
   overflow: hidden;
-  line-height: 18px;
+  line-height: 20px;
+  font-size: 17px;
 }
 
 .show .count-name {
-  height: 112px;
+  height: 138px;
+}
+
+@media (max-width: 403px) {
+  .show .count-name {
+    height: 158px;
+  }
 }
 
 .button .action {
