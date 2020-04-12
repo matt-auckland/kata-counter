@@ -16,7 +16,7 @@
         v-model="settingsClone.endDate"
         type="date"
       ></label>
-    <label
+    <!-- <label
       class="flex-label"
       for="pretendnokata"
     >Debugger: Hide Kata
@@ -25,8 +25,8 @@
         type="checkbox"
         v-model="settingsClone.pretendNoKata"
         @input="updateSetting('pretendNoKata', !settingsClone.pretendNoKata)"
-      ></label>
-    <button @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a Kata</button>
+      ></label> -->
+    <button @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a new Kata</button>
     <button @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load Kata from a template</button>
     <button @click.prevent="emitUpdateModal('import-json', 'Import Kata JSON Data')">Import Kata from JSON</button>
     <button @click.prevent="emitUpdateModal('export-json', 'Export Kata as JSON')">Export data as JSON</button>

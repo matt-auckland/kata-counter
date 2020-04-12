@@ -49,13 +49,13 @@
         </h2>
         <div class="setup-buttons">
           <button @click="openTemplateKataImport">
-            Load kata from a template
+            Load Kata from a template
           </button>
           <button @click="updateModalState('add-kata', 'Add a new Kata')">
-            Add a kata
+            Add a new Kata
           </button>
           <button @click="updateModalState('import-json', 'Import Kata JSON Data')">
-            Import kata from JSON
+            Import Kata from JSON
           </button>
           <button @click="importTestKata()">Load Test Data</button>
         </div>
@@ -178,7 +178,7 @@
                       </label>
                     </div>
                   </div>
-                  <div>
+                <div class="setup-buttons">
                     <button @click.prevent="hideModal">Cancel</button>
                     <button
                       @click.prevent="importTemplateKataStage++"
@@ -200,7 +200,7 @@
                   </li>
                 </ul>
 
-                <div>
+                <div class="setup-buttons">
                   <button @click.prevent="importTemplateKataStage--">
                     Back
                   </button>
@@ -212,10 +212,6 @@
                   </button>
                 </div>
               </div>
-            </template>
-
-            <template v-else-if="modal.state == 'TEST'">
-              <p>test</p>
             </template>
           </div>
         </transition>
@@ -283,11 +279,12 @@ export default {
         this.selectedTemplateKata.forEach(kata => {
           this.saveKata(kata, true);
         });
+        this.importTemplateKataStage = 1;
       }
     },
 
     beginEditKata(kataId) {
-      const kata = this.kataList.filter(k => k.name == kataId)[0];
+      const kata = this.kataList.filter(k => k.id == kataId)[0];
       if (!kata) return;
       this.selectedKata = kata;
       this.updateModalState("edit-kata", `Editing ${kata.name}`);
@@ -586,6 +583,12 @@ form > * {
   margin: 8px 0;
 }
 
+input {
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 3px 6px;
+}
+
 .flex-label {
   display: flex;
   justify-content: space-between;
@@ -607,6 +610,16 @@ form > * {
 
 .error-text {
   color: red;
+}
+
+.setup-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.setup-buttons > * {
+  margin: 5px;
 }
 
 /* Modal */
