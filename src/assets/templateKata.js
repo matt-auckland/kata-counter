@@ -11,7 +11,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -24,7 +24,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -37,7 +37,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -50,7 +50,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -63,7 +63,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -76,7 +76,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -89,7 +89,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -102,7 +102,7 @@ const testData = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     }
   ]
@@ -122,7 +122,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -136,7 +136,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -150,7 +150,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -164,7 +164,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -178,7 +178,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -192,7 +192,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
 
@@ -207,7 +207,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -221,7 +221,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -235,7 +235,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -249,7 +249,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -263,7 +263,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -276,7 +276,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -290,7 +290,7 @@ const gojuKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     }
   ]
@@ -310,7 +310,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -324,7 +324,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -338,7 +338,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -352,7 +352,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -366,7 +366,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -380,7 +380,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -401,7 +401,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -415,7 +415,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -429,7 +429,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -443,7 +443,7 @@ const kobudoKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     }
   ]
@@ -463,7 +463,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -477,7 +477,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -491,7 +491,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -505,7 +505,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -519,7 +519,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -533,7 +533,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -547,7 +547,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -561,7 +561,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -575,7 +575,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -589,7 +589,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -603,7 +603,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -617,7 +617,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -631,7 +631,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -645,7 +645,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -659,7 +659,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -673,7 +673,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -687,7 +687,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -701,7 +701,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -715,7 +715,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -729,7 +729,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -743,7 +743,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -757,7 +757,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -771,7 +771,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -785,7 +785,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -799,7 +799,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     },
     {
@@ -813,7 +813,7 @@ const shotokanKata = {
       goalReps: null,
       defaultGoalReps: true,
       defaultGoalDate: true,
-      lastUpdate: null,
+      lastUpdated: null,
       id: null
     }
   ]
