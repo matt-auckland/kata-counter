@@ -388,7 +388,14 @@ const kobudoKata = {
       tags: ["weapons", "bo"],
       reps: 0,
       colour: "brown",
-      tabs: 0
+      tabs: 0,
+
+      goalDate: null,
+      goalReps: null,
+      defaultGoalReps: true,
+      defaultGoalDate: true,
+      lastUpdated: null,
+      id: null
     },
     {
       name: "Shushi no Kon (Sho)",
