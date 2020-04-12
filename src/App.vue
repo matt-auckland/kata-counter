@@ -4,7 +4,9 @@
       <div
         @click="toggleSettings"
         id="options-icon"
-      >{{tab == 'COUNTERS' ? '⚙️' : '↩️'}}</div>
+      >
+        {{ tab == "COUNTERS" ? "⚙️" : "↩️" }}
+      </div>
       <select
         v-if="tab == 'COUNTERS'"
         id="filter-dropdown"
@@ -18,13 +20,15 @@
           v-for="tag in tagPool"
           :key="tag"
           :value="tag"
-        >{{ tag | capitalize }}</option>
+        >{{
+          tag | capitalize
+        }}</option>
       </select>
-      <h1 v-if="tab != 'COUNTERS'">{{ tab == 'SETTINGS' ? 'Settings' : `Editing ${selectedKata.name}`}}</h1>
+      <h1 v-if="tab != 'COUNTERS'">
+        {{ tab == "SETTINGS" ? "Settings" : `Editing ${selectedKata.name}` }}
+      </h1>
       <div id="total-reps">
-        <span v-if="tab == 'COUNTERS'">
-          Total Reps: {{totalKataReps}}
-        </span>
+        <span v-if="tab == 'COUNTERS'"> Total Reps: {{ totalKataReps }} </span>
       </div>
     </header>
 
@@ -44,9 +48,15 @@
           Looks like you haven't added any kata! Click below to get started!
         </h2>
         <div class="setup-buttons">
-          <button @click="updateModalState('load-template-data', 'Load Kata from a Template')">Load kata from a template</button>
-          <button @click="updateModalState('add-kata', 'Add a new Kata')">Add a kata</button>
-          <button @click="updateModalState('import-json', 'Import Kata JSON Data')">Import kata from JSON</button>
+          <button @click="openTemplateKataImport">
+            Load kata from a template
+          </button>
+          <button @click="updateModalState('add-kata', 'Add a new Kata')">
+            Add a kata
+          </button>
+          <button @click="updateModalState('import-json', 'Import Kata JSON Data')">
+            Import kata from JSON
+          </button>
           <button @click="importTestKata()">Load Test Data</button>
         </div>
       </template>
@@ -60,9 +70,13 @@
           @decrement="decrement"
           @edit="beginEditKata"
           :name="k.name"
-          :goalReps="k.defaultGoalReps ? settings.defaultRepsGoal : k.goalReps "
+          :goalReps="k.defaultGoalReps ? settings.defaultRepsGoal : k.goalReps"
           :reps="k.reps"
-          :daysRemaining="k.defaultGoalDate ? daysRemaining : k.goalDate.diff( moment(), 'days')"
+          :daysRemaining="
+            k.defaultGoalDate
+              ? daysRemaining
+              : k.goalDate.diff(moment(), 'days')
+          "
           :colour="k.colour ? k.colour : ''"
           :tabs="k.tabs"
         ></CounterButton>
@@ -87,7 +101,7 @@
             v-if="modal.showSlideUp"
             class="slide-up-modal-body"
           >
-            <h2>{{modal.title}}</h2>
+            <h2>{{ modal.title }}</h2>
             <button
               class="close-button"
               @click="hideModal"
@@ -119,53 +133,98 @@
                 />
                 <button @click="importFromJSON">Import Kata</button>
               </div>
-          </template>
+            </template>
 
+            <template v-else-if="modal.state == 'EXPORT-JSON'">
+              <div class="flex-col-center">
+                <p>
+                  Copy this JSON text and save it somewhere to back up your data
+                </p>
+                <textarea
+                  v-model="kataJSONExport"
+                  cols="30"
+                  rows="10"
+                  readonly
+                />
+                <button @click.prevent="hideModal">Close</button>
+              </div>
+            </template>
 
-          <template v-else-if="modal.state == 'EXPORT-JSON'">
-            <div class="flex-col-center">
-            <p>Copy this JSON text and save it somewhere to back up your data</p>
-            <textarea
-              v-model="kataJSON"
-              cols="30"
-              rows="10"
-              readonly
-            />
-            <button @click="hideModal">Close</button>
-            </div>
-        </template>
+            <template v-else-if="modal.state == 'LOAD-TEMPLATE-DATA'">
+              <template v-if="importTemplateKataStage == 1">
+                <p>
+                  Check the box by each kata's name to select it, then press
+                  continue to confirm your selection.
+                </p>
 
+                <form>
+                  <div class="template-kata-container">
+                    <div
+                      v-for="template in filteredTemplateKata"
+                      :key="template.name"
+                    >
+                      {{ template.name }}
+                      <hr />
+                      <label
+                        class="flex-label"
+                        v-for="kata in template.kata"
+                        :key="kata.name"
+                        :for="kata.name"
+                      >
+                        {{ kata.name
+                        }}<input
+                          type="checkbox"
+                          :value="kata"
+                          v-model="selectedTemplateKata"
+                          :name="kata.name"
+                          id=""
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <button @click.prevent="hideModal">Cancel</button>
+                    <button
+                      @click.prevent="importTemplateKataStage++"
+                      :disabled="selectedTemplateKata.length < 1"
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </form>
+              </template>
+              <div v-else-if="importTemplateKataStage == 2">
+                <p>
+                  These are the Kata you selected, press Back if you want to
+                  edit your selection, otherwise click Add Kata.
+                </p>
+                <ul class="template-kata-container">
+                  <li v-for="kata in selectedTemplateKata" :key="kata.id">
+                    {{ kata.name }}
+                  </li>
+                </ul>
 
-          <template v-else-if="modal.state == 'LOAD-TEMPLATE-DATA'">
-            <p>
-              Check the box by each kata's name to select it, then press continue to confirm your selection.
-            </p>
-
-            <form>
-              <div class="template-kata-container">
-                <div v-for="template in filteredTemplateKata" :key="template.name">
-                  {{template.name}}
-                  <hr>
-                  <label class="flex-label" v-for="kata in template.kata" :key="kata.name" :for="kata.name">
-                    {{kata.name}}<input type="checkbox" :name="kata.name" id="">
-                  </label>  
+                <div>
+                  <button @click.prevent="importTemplateKataStage--">
+                    Back
+                  </button>
+                  <button
+                    @click.prevent="importTemplateKata"
+                    :disabled="selectedTemplateKata.length < 1"
+                  >
+                    Add Kata
+                  </button>
                 </div>
               </div>
-              <div>
-                <button>Cancel</button>
-                <button :disabled="selectedTemplateKata.length < 1">Continue</button>
-              </div>
-            </form>
-          </template>
+            </template>
 
-
-          <template v-else-if="modal.state == 'TEST'">
-          <p>test</p>
-        </template>
-        </div>
-      </transition>
-    </div>
-      </transition>
+            <template v-else-if="modal.state == 'TEST'">
+              <p>test</p>
+            </template>
+          </div>
+        </transition>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -212,14 +271,22 @@ export default {
       this.updateStorage(parsedKata);
     },
 
-    updateSelectedTemplateKata(kataListName) {
-      const index = this.selectedTemplateKata.indexOf(kataListName);
-      if (index == -1) {
-        this.selectedTemplateKata.push(kataListName);
-      } else {
-        this.selectedTemplateKata.splice(index, 1);
+    // updateSelectedTemplateKata(kataListName) {
+    //   const index = this.selectedTemplateKata.indexOf(kataListName);
+    //   if (index == -1) {
+    //     this.selectedTemplateKata.push(kataListName);
+    //   } else {
+    //     this.selectedTemplateKata.splice(index, 1);
+    //   }
+    //   console.log(this.selectedTemplateKata);
+    // },
+
+    importTemplateKata() {
+      if (this.selectedTemplateKata.length) {
+        this.selectedTemplateKata.forEach(kata => {
+          this.saveKata(kata, true);
+        });
       }
-      console.log(this.selectedTemplateKata);
     },
 
     beginEditKata(kataName) {
@@ -300,6 +367,10 @@ export default {
       ) {
         return;
       }
+
+      if (this.modal.state == "LOAD-TEMPLATE-DATA")
+        this.selectedTemplateKata = [];
+
       this.modal.showSlideUp = false;
     },
     triggerSlideUpModal() {
@@ -307,6 +378,11 @@ export default {
     },
     modalBodyAfterLeave() {
       this.updateModalState("hide");
+    },
+
+    openTemplateKataImport() {
+      this.importTemplateKataStage = 1;
+      this.updateModalState("load-template-data", "Load Kata from a Template");
     },
 
     // Settings Page
@@ -323,9 +399,6 @@ export default {
     },
     loadSampleData() {
       console.log("loadSampleData");
-    },
-    exportData() {
-      console.log("exportData");
     }
   },
   computed: {
@@ -339,6 +412,9 @@ export default {
     totalKataReps() {
       if (!this.kataList || this.kataList.length < 1) return 0;
       return this.kataList.reduce((sum, k) => Number.parseInt(k.reps) + sum, 0);
+    },
+    kataJSONExport() {
+      return JSON.stringify(this.kataList);
     }
   },
   created() {
@@ -360,7 +436,7 @@ export default {
       daysRemaining: 0, // days till default goal
       tagPool: null,
       filterTag: false,
-      kataList: null,
+      kataList: [],
 
       settings: {
         pretendNoKata: false,
@@ -374,6 +450,7 @@ export default {
         showSlideUp: false
       },
 
+      importTemplateKataStage: 1,
       selectedTemplateKata: [],
       selectedKata: null,
       kataJSON: null,
@@ -474,6 +551,32 @@ body {
 .header h1 {
   margin: 0;
 }
+button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  margin: 10px 0;
+}
+
+button:hover {
+  border-color: black;
+  cursor: pointer;
+}
+
+button:disabled:hover {
+  border-color: #ccc;
+  cursor: initial;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 14px;
+  line-height: 16px;
+}
 
 form {
   display: flex;
@@ -500,6 +603,9 @@ form > * {
 .template-kata-container {
   overflow-y: scroll;
   max-height: 320px;
+  padding-right: 16px;
+  display: block;
+  text-align: left;
 }
 
 /* Modal */

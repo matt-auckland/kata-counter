@@ -129,7 +129,7 @@ export default {
 }
 
 .show .count-name {
-  height: 92px;
+  height: 112px;
 }
 
 .button .action {
