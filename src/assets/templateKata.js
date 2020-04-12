@@ -57,7 +57,7 @@ const testData = {
       name: "Maezato no Tekko",
       tags: ["weapons", "tekko"],
       reps: 10,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
       goalDate: null,
       goalReps: null,
@@ -70,7 +70,7 @@ const testData = {
       name: "Shushi no Kon (Sho)",
       tags: ["weapons", "bo"],
       reps: 10,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
       goalDate: null,
       goalReps: null,
@@ -83,7 +83,7 @@ const testData = {
       name: "Chikin Shita Haku no Sai",
       tags: ["weapons", "sai"],
       reps: 10,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 2,
       goalDate: null,
       goalReps: null,
@@ -96,7 +96,7 @@ const testData = {
       name: "Maezato no Nunchaku",
       tags: ["weapons", "nunchaku"],
       reps: 10,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
       goalDate: null,
       goalReps: null,
@@ -129,7 +129,7 @@ const gojuKata = {
       name: "Gekisai Dai Ni",
       tags: ["goju", "kaishugata"],
       reps: 0,
-      colour: "dark-blue",
+      colour: "blue",
       tabs: 0,
 
       goalDate: null,
@@ -157,7 +157,7 @@ const gojuKata = {
       name: "Seiyunchin",
       tags: ["goju", "kaishugata"],
       reps: 0,
-      colour: "dark-green",
+      colour: "green",
       tabs: 0,
 
       goalDate: null,
@@ -171,7 +171,7 @@ const gojuKata = {
       name: "Shisochin",
       tags: ["goju", "kaishugata"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
 
       goalDate: null,
@@ -183,6 +183,21 @@ const gojuKata = {
     },
     {
       name: "Sanseiru",
+      tags: ["goju", "kaishugata"],
+      reps: 0,
+      colour: "black",
+      tabs: 0,
+
+      goalDate: null,
+      goalReps: null,
+      defaultGoalReps: true,
+      defaultGoalDate: true,
+      lastUpdate: null,
+      id: null
+    },
+
+    {
+      name: "Seipai",
       tags: ["goju", "kaishugata"],
       reps: 0,
       colour: "black",
@@ -238,20 +253,6 @@ const gojuKata = {
       id: null
     },
     {
-      name: "Seipai",
-      tags: ["goju", "kaishugata"],
-      reps: 0,
-      colour: "black",
-      tabs: 0,
-
-      goalDate: null,
-      goalReps: null,
-      defaultGoalReps: true,
-      defaultGoalDate: true,
-      lastUpdate: null,
-      id: null
-    },
-    {
       name: "Sanchin",
       tags: ["goju", "heishugata"],
       reps: 0,
@@ -281,7 +282,7 @@ const gojuKata = {
     {
       name: "Tensho",
       tags: ["goju", "heishugata"],
-      reps: 12,
+      reps: 0,
       colour: "black",
       tabs: 0,
 
@@ -302,7 +303,7 @@ const kobudoKata = {
       name: "Akimine Kihon Bo Ichi",
       tags: ["weapons", "bo"],
       reps: 0,
-      colour: "dark-green",
+      colour: "green",
       tabs: 0,
 
       goalDate: null,
@@ -316,7 +317,7 @@ const kobudoKata = {
       name: "Akimine Kihon Sai",
       tags: ["weapons", "sai"],
       reps: 0,
-      colour: "dark-green",
+      colour: "green",
       tabs: 1,
 
       goalDate: null,
@@ -330,7 +331,7 @@ const kobudoKata = {
       name: "Akimine Kihon Bo Ichi (Left Handed)",
       tags: ["weapons", "bo"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
 
       goalDate: null,
@@ -344,7 +345,7 @@ const kobudoKata = {
       name: "Akimine Kihon Sai Ni",
       tags: ["weapons", "sai"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
 
       goalDate: null,
@@ -358,7 +359,7 @@ const kobudoKata = {
       name: "Maezato no Tekko",
       tags: ["weapons", "tekko"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
 
       goalDate: null,
@@ -372,7 +373,7 @@ const kobudoKata = {
       name: "Akimine Kihon Bo Ni",
       tags: ["weapons", "bo"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
 
       goalDate: null,
@@ -386,14 +387,14 @@ const kobudoKata = {
       name: "Akimine Kihon Bo Ni (Left handed)",
       tags: ["weapons", "bo"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0
     },
     {
       name: "Shushi no Kon (Sho)",
       tags: ["weapons", "bo"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
 
       goalDate: null,
@@ -407,7 +408,7 @@ const kobudoKata = {
       name: "Chikin Shita Haku no Sai",
       tags: ["weapons", "sai"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 2,
 
       goalDate: null,
@@ -421,7 +422,7 @@ const kobudoKata = {
       name: "Maezato no Nunchaku",
       tags: ["weapons", "nunchaku"],
       reps: 0,
-      colour: "dark-brown",
+      colour: "brown",
       tabs: 0,
 
       goalDate: null,
@@ -620,7 +621,7 @@ const shotokanKata = {
       id: null
     },
     {
-      name: "Empi",
+      name: "Enpi",
       tags: ["shotokan"],
       reps: 0,
       colour: "white",
@@ -821,8 +822,8 @@ const shotokanKata = {
 const templateKata = {
   testData,
   gojuKata,
-  shotokanKata,
-  kobudoKata
+  kobudoKata,
+  shotokanKata
 };
 
 export default templateKata;
