@@ -34,8 +34,14 @@ yarn install
 # Compiles and hot-reloads for development
 yarn serve
 
+# Serve to an Android device for development (make sure to plug a phone in)
+cordova-serve-android
+
 # Compiles and minifies for production
 yarn build
+
+# Build Android APK (to install on Android, you need to sign the APK with Android Studio)
+yarn cordova-build-android
 
 # Lints and fixes files
 yarn lint
