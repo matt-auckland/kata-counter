@@ -2,6 +2,8 @@
 
 Cordova App for recording kata repetitions and goals. It will display how many reps you need to do per week/day to meet your goal.
 
+![Screenshot of the app]('./screenshot.jpg')
+
 ## Features
 
 - Filter kata by tags
