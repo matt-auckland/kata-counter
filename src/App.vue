@@ -1,5 +1,8 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    :style="bodyStyle"
+  >
     <header class="header">
       <div
         @click="toggleSettings"
@@ -88,6 +91,7 @@
         class="slide-up-modal"
         v-if="modal.state != 'HIDE'"
         @click="hideModal($event, true)"
+        :style="modal.style"
       >
         <transition
           :name="'modal-transition'"
@@ -346,13 +350,22 @@ export default {
       this.kataList = JSON.parse(this.storage.getItem("kata"));
       this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
     },
-
     // modal related
     updateModalState(state, title = "") {
       if (!state) return;
 
       this.modal.state = state.toUpperCase();
       this.modal.title = title;
+    },
+    triggerSlideUpModal() {
+      const negativeScrollTop = window.pageYOffset * -1;
+
+      this.modal.scrollTop = window.pageYOffset;
+      this.modal.style = `top: ${window.pageYOffset}px; `;
+
+      this.bodyStyle = `top: ${negativeScrollTop}px; position: fixed; left: 0; right: 0; padding: 0 8px;`;
+
+      this.modal.showSlideUp = true;
     },
     hideModal($event, checkTarget) {
       if (
@@ -362,14 +375,21 @@ export default {
         return;
       }
 
-      if (this.modal.state == "LOAD-TEMPLATE-DATA")
+      if (this.modal.state == "LOAD-TEMPLATE-DATA") {
         this.selectedTemplateKata = [];
+      }
 
       this.modal.showSlideUp = false;
+
+      this.bodyStyle = "";
+      this.$nextTick(() => {
+        if (this.modal.scrollTop !== null) {
+          window.scrollTo(0, this.modal.scrollTop);
+          this.modal.scrollTop = null;
+        }
+      });
     },
-    triggerSlideUpModal() {
-      this.modal.showSlideUp = true;
-    },
+
     modalBodyAfterLeave() {
       this.updateModalState("hide");
     },
@@ -436,11 +456,13 @@ export default {
         endDate: moment("2021-01-01", "YYYY-MM-DD"),
         defaultRepsGoal: 100
       },
-
+      bodyStyle: "",
       modal: {
         state: "HIDE",
         title: "",
-        showSlideUp: false
+        showSlideUp: false,
+        style: "",
+        scrollTop: null
       },
 
       importTemplateKataStage: 1,
