@@ -122,10 +122,6 @@ export default {
   background: gold;
 }
 
-.show .tab {
-  height: 102px;
-}
-
 .count-name {
   transition: 320ms;
   margin: 5px 0;
@@ -141,9 +137,17 @@ export default {
   height: 138px;
 }
 
+.show .tab {
+  height: 148px;
+}
+
 @media (max-width: 403px) {
   .show .count-name {
     height: 158px;
+  }
+
+  .show .tab {
+    height: 168px;
   }
 }
 
