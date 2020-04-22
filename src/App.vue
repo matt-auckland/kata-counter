@@ -73,11 +73,7 @@
           @edit="beginEditKata"
           :kata="k"
           :goalReps="k.defaultGoalReps ? settings.defaultRepsGoal : k.goalReps"
-          :daysRemaining="
-            k.defaultGoalDate
-              ? daysRemaining
-              : k.goalDate.diff(moment(), 'days')
-          "
+          :daysRemaining="k.defaultGoalDate ? settings.defaultDaysRemaining : calculateDaysRemaining(k.goalDate)"
         ></CounterButton>
       </template>
     </template>
@@ -252,14 +248,14 @@ export default {
       const kata = this.kataList.filter(k => k.id === kataId)[0];
       kata.reps++;
       kata.lastUpdated = moment();
-      this.updateStorage(this.kataList);
+      this.updateKataStorage(this.kataList);
     },
     decrement(kataId) {
       const kata = this.kataList.filter(k => k.id === kataId)[0];
       if (kata.reps == 0) return;
       kata.reps--;
       kata.lastUpdated = moment();
-      this.updateStorage(this.kataList);
+      this.updateKataStorage(this.kataList);
     },
 
     importFromJSON() {
@@ -270,7 +266,7 @@ export default {
 
       try {
         parsedKata = JSON.parse(vm.kataJSON);
-        this.updateStorage(parsedKata);
+        this.updateKataStorage(parsedKata);
         this.kataJSON = "";
         this.hideModal();
       } catch (e) {
@@ -295,7 +291,14 @@ export default {
     },
 
     importTestKata() {
-      this.updateStorage(templateKata.testData.kata);
+      this.updateKataStorage(templateKata.testData.kata);
+    },
+
+    calculateDaysRemaining(date) {
+      const daysRemaining = moment(date).diff(moment(), "days");
+
+      if (daysRemaining < 1) return 1;
+      return daysRemaining;
     },
 
     // editing kata
@@ -315,7 +318,7 @@ export default {
         }
       }
 
-      this.updateStorage(this.kataList);
+      this.updateKataStorage(this.kataList);
       this.hideModal();
       this.selectedKata = null;
     },
@@ -328,7 +331,7 @@ export default {
         }
       }
 
-      this.updateStorage(this.kataList);
+      this.updateKataStorage(this.kataList);
       this.hideModal();
       this.selectedKata = null;
     },
@@ -338,6 +341,7 @@ export default {
       this.selectedKata = null;
     },
 
+    // Settings
     toggleSettings() {
       if (this.tab != "COUNTERS") {
         this.tab = "COUNTERS";
@@ -345,11 +349,22 @@ export default {
         this.tab = "SETTINGS";
       }
     },
-    updateStorage(kataData) {
+    updateSetting(key, data) {
+      if (key == "defaultEndDate") data = moment(data);
+
+      this.settings[key] = data;
+      this.updateSettingsStorage();
+    },
+    updateSettingsStorage() {
+      this.storage.setItem("settings", JSON.stringify(this.settings));
+      this.settings = JSON.parse(this.storage.getItem("settings"));
+    },
+    updateKataStorage(kataData) {
       this.storage.setItem("kata", JSON.stringify(kataData));
       this.kataList = JSON.parse(this.storage.getItem("kata"));
       this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
     },
+
     // modal related
     updateModalState(state, title = "") {
       if (!state) return;
@@ -397,13 +412,6 @@ export default {
     openTemplateKataImport() {
       this.importTemplateKataStage = 1;
       this.updateModalState("load-template-data", "Load Kata from a Template");
-    },
-
-    // Settings Page
-    updateSetting(key, data) {
-      if (key == "endDate") data = moment(data);
-
-      this.settings[key] = data;
     }
   },
   computed: {
@@ -431,10 +439,22 @@ export default {
     }
   },
   created() {
-    this.daysRemaining = this.settings.endDate.diff(moment(), "days");
-
     this.storage = window.localStorage;
+    const settings = this.storage.getItem("settings");
     const kata = this.storage.getItem("kata");
+
+    if (settings) {
+      this.settings = JSON.parse(settings);
+    } else {
+      this.settings.defaultEndDate = moment("2021-01-01", "YYYY-MM-DD"); // TODO change this so it is 1 year in the future
+      this.settings.defaultDaysRemaining = this.calculateDaysRemaining(
+        this.settings.defaultEndDate
+      );
+      this.settings.pretendNoKata = false;
+      this.settings.defaultRepsGoal = 100;
+
+      this.updateSettingsStorage();
+    }
 
     if (kata) {
       this.kataList = JSON.parse(kata);
@@ -446,15 +466,15 @@ export default {
     return {
       storage: null, // localStorage reference
 
-      daysRemaining: 0, // days till default goal
       tagPool: null,
       filterTag: false,
       kataList: [],
 
       settings: {
-        pretendNoKata: false,
-        endDate: moment("2021-01-01", "YYYY-MM-DD"),
-        defaultRepsGoal: 100
+        pretendNoKata: null,
+        defaultEndDate: null,
+        defaultDaysRemaining: null,
+        defaultRepsGoal: null
       },
       bodyStyle: "",
       modal: {
