@@ -12,7 +12,7 @@
       class="flex-label"
       for="defaultenddate"
     >Default Goal End Date<input
-        @input="updateSetting('endDate', settingsClone.endDate)"
+        @input="updateSetting('defaultEndDate', settingsClone.endDate)"
         v-model="settingsClone.endDate"
         type="date"
       ></label>

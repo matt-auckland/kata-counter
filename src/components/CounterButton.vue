@@ -31,15 +31,14 @@ export default {
       const neededReps = Number.parseInt(this.goalReps) - this.kata.reps;
       if (neededReps <= 0) return `Goal complete`;
       if (this.daysRemaining == 0) return `${neededReps} reps per day`;
+      if (this.daysRemaining <= 60)
+        return `${Math.ceil(neededReps / this.daysRemaining)} reps per day`;
 
-      if (this.daysRemaining > 60) {
-        const weeksRemaining = moment
-          .duration(this.daysRemaining, "days")
-          .asWeeks();
-        return `${Math.ceil(neededReps / weeksRemaining)} reps per week`;
-      }
+      const weeksRemaining = moment
+        .duration(this.daysRemaining, "days")
+        .asWeeks();
 
-      return `${Math.ceil(neededReps / this.daysRemaining)} reps per day`;
+      return `${Math.ceil(neededReps / weeksRemaining)} reps per week`;
     },
     lastUpdatedString() {
       if (this.kata.lastUpdated) {

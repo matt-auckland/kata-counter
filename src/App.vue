@@ -294,13 +294,6 @@ export default {
       this.updateKataStorage(templateKata.testData.kata);
     },
 
-    calculateDaysRemaining(date) {
-      const daysRemaining = moment(date).diff(moment(), "days");
-
-      if (daysRemaining < 1) return 1;
-      return daysRemaining;
-    },
-
     // editing kata
     saveKata(draftKata, isNewKata) {
       if (typeof draftKata.tags == "string") {
@@ -353,6 +346,7 @@ export default {
       if (key == "defaultEndDate") data = moment(data);
 
       this.settings[key] = data;
+      this.updateDefaultDaysRemaining();
       this.updateSettingsStorage();
     },
     updateSettingsStorage() {
@@ -363,6 +357,17 @@ export default {
       this.storage.setItem("kata", JSON.stringify(kataData));
       this.kataList = JSON.parse(this.storage.getItem("kata"));
       this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
+    },
+    calculateDaysRemaining(date) {
+      const daysRemaining = moment(date).diff(moment(), "days");
+
+      if (daysRemaining < 1) return 1;
+      return daysRemaining;
+    },
+    updateDefaultDaysRemaining() {
+      this.settings.defaultDaysRemaining = this.calculateDaysRemaining(
+        this.settings.defaultEndDate
+      );
     },
 
     // modal related
@@ -446,10 +451,8 @@ export default {
     if (settings) {
       this.settings = JSON.parse(settings);
     } else {
-      this.settings.defaultEndDate = moment("2021-01-01", "YYYY-MM-DD"); // TODO change this so it is 1 year in the future
-      this.settings.defaultDaysRemaining = this.calculateDaysRemaining(
-        this.settings.defaultEndDate
-      );
+      this.settings.defaultEndDate = moment().add(1, "years");
+      this.updateDefaultDaysRemaining();
       this.settings.pretendNoKata = false;
       this.settings.defaultRepsGoal = 100;
 
