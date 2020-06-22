@@ -57,14 +57,17 @@
           <button @click="updateModalState('add-kata', 'Add a new Kata')">
             Add a new Kata
           </button>
-          <button @click="updateModalState('import-json', 'Import Kata JSON Data')">
-            Import Kata from JSON
+          <button @click="updateModalState('import-json', 'Import Backup JSON Data')">
+            Import back up data from JSON
           </button>
           <button @click="importTestKata()">Load Test Data</button>
         </div>
       </template>
 
-      <template v-else>
+      <div
+        class="counter-cont"
+        v-else
+      >
         <CounterButton
           v-for="k in filteredKataList"
           :key="k.name"
@@ -75,7 +78,7 @@
           :goalReps="k.defaultGoalReps ? settings.defaultRepsGoal : k.goalReps"
           :daysRemaining="k.defaultGoalDate ? settings.defaultDaysRemaining : calculateDaysRemaining(k.goalDate)"
         ></CounterButton>
-      </template>
+      </div>
     </template>
 
     <!-- MODAL  -->
@@ -121,13 +124,13 @@
 
             <template v-else-if="modal.state == 'IMPORT-JSON'">
               <div class="flex-col-center">
-                <p>Paste in your JSON below</p>
+                <p>Paste your Back up Data JSON below</p>
                 <p
                   class="error-text"
-                  v-if="kataJSONError"
-                >{{kataJSONError}}</p>
-                <textarea v-model="kataJSON" />
-                <button :disabled="kataJSON.length > 0" @click="importFromJSON">Import Kata</button>
+                  v-if="dataJSONError"
+                >{{dataJSONError}}</p>
+                <textarea v-model="dataJSON" />
+                <button :disabled="dataJSON.length <= 0"  @click="importFromJSON">Import Data</button>
               </div>
             </template>
 
@@ -137,11 +140,13 @@
                   Copy this JSON text and save it somewhere to back up your data
                 </p>
                 <textarea
-                  v-model="kataJSONExport"
+                  v-model="dataJSONExport"
+                  id="dataJSON"
                   cols="30"
                   rows="10"
                   readonly
                 />
+                <button @click.prevent="copyJSON">Copy JSON</button>
                 <button @click.prevent="hideModal">Close</button>
               </div>
             </template>
@@ -244,33 +249,41 @@ export default {
   },
   methods: {
     // kata counter
+    updateKataHist(kata) {
+      kata.history.push({
+        count: kata.reps,
+        date: moment()
+      });
+    },
     increment(kataId) {
       const kata = this.kataList.filter(k => k.id === kataId)[0];
       kata.reps++;
-      kata.lastUpdated = moment();
+      this.updateKataHist();
       this.updateKataStorage(this.kataList);
     },
     decrement(kataId) {
       const kata = this.kataList.filter(k => k.id === kataId)[0];
       if (kata.reps == 0) return;
       kata.reps--;
-      kata.lastUpdated = moment();
+      this.updateKataHist();
+
       this.updateKataStorage(this.kataList);
     },
 
     importFromJSON() {
-      this.kataJSONError = "";
+      this.dataJSONError = "";
 
       const vm = this;
-      let parsedKata;
+      let parsedData;
 
       try {
-        parsedKata = JSON.parse(vm.kataJSON);
-        this.updateKataStorage(parsedKata);
-        this.kataJSON = "";
+        parsedData = JSON.parse(vm.dataJSON);
+        this.updateKataStorage(parsedData.kata);
+        this.updateSettingsStorage(parsedData.settings);
+        this.dataJSON = "";
         this.hideModal();
       } catch (e) {
-        this.kataJSONError = "Invalid JSON data. Did you copy-paste correctly?";
+        this.dataJSONError = "Invalid JSON data. Did you copy-paste correctly?";
       }
     },
 
@@ -299,7 +312,8 @@ export default {
       if (typeof draftKata.tags == "string") {
         draftKata.tags = draftKata.tags.split(",").filter(tag => tag);
       }
-      draftKata.lastUpdated = moment();
+
+      if (isNewKata) this.updateKataHist(draftKata);
 
       if (!draftKata.id) draftKata.id = Date.now();
 
@@ -369,6 +383,11 @@ export default {
         this.settings.defaultEndDate
       );
     },
+    copyJSON() {
+      var copyText = document.querySelector("#dataJSON");
+      copyText.select();
+      document.execCommand("copy");
+    },
 
     // modal related
     updateModalState(state, title = "") {
@@ -417,6 +436,38 @@ export default {
     openTemplateKataImport() {
       this.importTemplateKataStage = 1;
       this.updateModalState("load-template-data", "Load Kata from a Template");
+    },
+
+    updateDataScheme(kata) {
+      let didUpdate = false;
+
+      if (!this.settings.schemaVersion) {
+        this.settings.schemaVersion = 1;
+        didUpdate = true;
+      }
+
+      let parsedKata = JSON.parse(kata);
+      parsedKata = parsedKata.map(k => {
+        if (!k.history) {
+          k.history = [
+            {
+              count: k.reps,
+              date: k.lastUpdated || moment()
+            }
+          ];
+          delete k.lastUpdated;
+          didUpdate = true;
+        }
+
+        if (k.lastUpdated) delete k.lastUpdated;
+
+        return k;
+      });
+
+      if (didUpdate) {
+        this.updateKataStorage(parsedKata);
+        this.updateSettingsStorage();
+      }
     }
   },
   computed: {
@@ -439,8 +490,12 @@ export default {
         0
       );
     },
-    kataJSONExport() {
-      return JSON.stringify(this.kataList);
+    dataJSONExport() {
+      const data = {
+        kata: this.kataList,
+        settings: this.settings
+      };
+      return JSON.stringify(data);
     }
   },
   created() {
@@ -450,11 +505,18 @@ export default {
 
     if (settings) {
       this.settings = JSON.parse(settings);
+      if (
+        !this.settings.schemaVersion ||
+        this.settings.schemaVersion < this.SCHEMA_VERSION
+      ) {
+        this.updateDataScheme(kata);
+      }
     } else {
       this.settings.defaultEndDate = moment().add(1, "years");
       this.updateDefaultDaysRemaining();
       this.settings.pretendNoKata = false;
       this.settings.defaultRepsGoal = 100;
+      this.settings.schemaVersion = this.SCHEMA_VERSION;
 
       this.updateSettingsStorage();
     }
@@ -467,6 +529,7 @@ export default {
 
   data() {
     return {
+      SCHEMA_VERSION: 1,
       storage: null, // localStorage reference
 
       tagPool: null,
@@ -491,8 +554,8 @@ export default {
       importTemplateKataStage: 1,
       selectedTemplateKata: [],
       selectedKata: null,
-      kataJSON: "",
-      kataJSONError: "",
+      dataJSON: "",
+      dataJSONError: "",
 
       //  Tab names: SETTINGS, COUNTERS
       tab: "COUNTERS"
@@ -506,8 +569,8 @@ export default {
   --modal-zindex: 10;
 
   /* COLOURS */
-  --background-color: #282828;
-  --base-font-colour: #fff;
+  --background-color: #fff;
+  --base-font-colour: #282828;
   --base-red: #ff4848;
   --blue: #3e81ea;
   --dark-blue: #215bb7;
@@ -566,8 +629,17 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid var(--base-font-colour);
   padding: 10px;
+}
+
+.counter-cont {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.card {
+  margin: 7.5px;
 }
 
 #options-icon {
@@ -692,7 +764,7 @@ input {
   position: relative;
   background: white;
   color: #333;
-  border-radius: 50px 50px 0 0;
+  border-radius: 30px 30px 0 0;
   min-height: 50%;
   max-width: 460px;
   width: 100%;

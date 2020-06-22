@@ -4,11 +4,6 @@ import moment from "moment";
 export default {
   name: "counter-button",
   props: ["goalReps", "daysRemaining", "kata"],
-  data() {
-    return {
-      show: false
-    };
-  },
   methods: {
     decrementEvent() {
       if (this.kata.reps == 0) return;
@@ -17,10 +12,6 @@ export default {
     incrementEvent() {
       this.$emit("increment", this.kata.id);
     },
-    showGoal($event) {
-      if ($event.target.classList.contains("prevent-open")) return;
-      this.show = !this.show;
-    },
     editKataEvent() {
       this.$emit("edit", this.kata.id);
     }
@@ -28,30 +19,28 @@ export default {
   computed: {
     requiredReps() {
       // calc days left
-      const neededReps = Number.parseInt(this.goalReps) - this.kata.reps;
-      if (neededReps <= 0) return `Goal complete`;
-      if (this.daysRemaining == 0) return `${neededReps} reps per day`;
+      const repsRemaining =
+        Number.parseInt(this.goalReps) - Number.parseInt(this.kata.reps);
+      if (repsRemaining <= 0) return `Goal complete`;
+      if (this.daysRemaining == 0) return `${repsRemaining} reps per day`;
       if (this.daysRemaining <= 60)
-        return `${Math.ceil(neededReps / this.daysRemaining)} reps per day`;
+        return `${Math.ceil(repsRemaining / this.daysRemaining)} reps per day`;
 
       const weeksRemaining = moment
         .duration(this.daysRemaining, "days")
         .asWeeks();
 
-      return `${Math.ceil(neededReps / weeksRemaining)} reps per week`;
+      return `${Math.ceil(repsRemaining / weeksRemaining)} reps per week`;
     },
     lastUpdatedString() {
-      if (this.kata.lastUpdated) {
-        return `Last Updated: ${moment(this.kata.lastUpdated).format(
-          "HH:mm:ss, D/MM/YYYY"
-        )}`;
-      }
-      return "Never updated";
+      const history = this.kata.history[this.kata.history.length - 1];
+      return `Last Updated: ${moment(history.date).format(
+        "HH:mm:ss, D/MM/YYYY"
+      )}`;
     },
     classObject() {
       const classes = [];
       if (this.kata.colour) classes.push(this.kata.colour.toString());
-      if (this.show) classes.push("show");
       return classes;
     }
   }
@@ -59,38 +48,27 @@ export default {
 </script>
 
 <template>
-  <div
-    class="button"
-    :class="classObject"
-    @click="showGoal"
-  >
+  <div class="card">
     <div
-      class="action left prevent-open"
-      @click="decrementEvent"
-    >
-      <span class="button-icon prevent-open">-</span>
-    </div>
-    <div
-      class="tab"
-      v-for="(tab, i) in kata.tabs"
-      :key="tab + i"
-      :style="{left: `${55 + (20 * i)}px`}"
+      class="belt"
+      :class="classObject"
     ></div>
-    <div class="count-name">
+    <div class="content">
       <div class="name">{{ kata.name }}</div>
-      <div class="count">{{ kata.reps }}</div>
-      <template v-show="show">
-        <div>{{ requiredReps }}</div>
-        <div>Goal: {{ goalReps }}</div>
-        <div>{{ lastUpdatedString }}</div>
-        <button @click.prevent="editKataEvent">Edit</button>
-      </template>
+      {{lastUpdatedString}}
+      <div class="count">{{ kata.reps }}/{{ goalReps }} reps</div>
+      <div class="prescription">{{ requiredReps }}</div>
     </div>
-    <div
-      class="action right prevent-open"
-      @click="incrementEvent"
-    >
-      <span class="button-icon prevent-open">+</span>
+    <div class="btn-cont">
+      <div
+        class="btn"
+        @click="editKataEvent"
+      >Edit</div>
+      <div class="divider"></div>
+      <div
+        class="increment-btn btn"
+        @click="incrementEvent"
+      >+1</div>
     </div>
   </div>
 </template>
@@ -250,5 +228,60 @@ export default {
   color: #fff;
   border-color: var(--black);
   background: var(--black);
+}
+</style>
+
+<style scoped>
+.card {
+  user-select: none;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-width: 160px;
+  font-size: 16px;
+  line-height: 1.3;
+  color: #666;
+  background: white;
+  flex: 1 1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.content {
+  padding: 12px 16px 10px;
+  flex: 1;
+}
+
+.card .belt {
+  padding: 0;
+  width: 100%;
+  height: 8px;
+  /* background-color: green; */
+}
+
+.name {
+  color: black;
+}
+
+.card .btn-cont {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-top: 2px solid #ccc;
+}
+
+.card .divider {
+  border: 1px solid #ccc;
+}
+
+.card .btn {
+  cursor: pointer;
+  padding: 3px;
+  text-align: center;
+  vertical-align: center;
+  color: black;
+  flex: 1 0;
 }
 </style>
