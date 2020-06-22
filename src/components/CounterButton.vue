@@ -33,10 +33,13 @@ export default {
       return `${Math.ceil(repsRemaining / weeksRemaining)} reps per week`;
     },
     lastUpdatedString() {
-      const history = this.kata.history[this.kata.history.length - 1];
-      return `Last Updated: ${moment(history.date).format(
-        "HH:mm:ss, D/MM/YYYY"
-      )}`;
+      if (this.kata.history) {
+        const hist = this.kata.history[this.kata.history.length - 1];
+        return `Last Updated: ${moment(hist.date).format(
+          "HH:mm:ss, D/MM/YYYY"
+        )}`;
+      }
+      return "";
     },
     classObject() {
       const classes = [];

@@ -321,7 +321,12 @@ export default {
         this.kataList.push(draftKata);
       } else {
         for (let i = 0; i < this.kataList.length; i++) {
-          if (this.kataList[i].id == draftKata.id) this.kataList[i] = draftKata;
+          if (this.kataList[i].id == draftKata.id) {
+            if (this.kataList[i].reps !== draftKata.reps)
+              this.updateKataHist(draftKata);
+
+            this.kataList[i] = draftKata;
+          }
         }
       }
 
