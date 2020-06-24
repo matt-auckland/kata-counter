@@ -12,8 +12,8 @@
       class="flex-label"
       for="defaultenddate"
     >Default Goal End Date<input
-        @input="updateSetting('defaultEndDate', settingsClone.endDate)"
-        v-model="settingsClone.endDate"
+        @change="updateDate"
+        v-model="endDate"
         type="date"
       ></label>
     <!-- <label
@@ -40,13 +40,16 @@ export default {
   props: ["settings"],
   data() {
     return {
-      settingsClone: null
+      settingsClone: null,
+      endDate: null
     };
   },
   watch: {
     settings: {
       deep: true,
       handler() {
+        console.log("triggered");
+
         this.loadSettings();
       }
     }
@@ -55,12 +58,16 @@ export default {
     this.loadSettings();
   },
   methods: {
+    updateDate($event) {
+      this.updateSetting("defaultEndDate", moment($event.target.valueAsDate));
+    },
     updateSetting(key, data) {
       this.$emit("updateSetting", key, data);
     },
     loadSettings() {
       this.settingsClone = JSON.parse(JSON.stringify(this.settings));
-      this.settingsClone.endDate = moment(this.settingsClone.endDate).format(
+
+      this.endDate = moment(this.settingsClone.defaultEndDate).format(
         "YYYY-MM-DD"
       );
     },

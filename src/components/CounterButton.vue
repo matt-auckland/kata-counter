@@ -3,7 +3,7 @@ import moment from "moment";
 
 export default {
   name: "counter-button",
-  props: ["goalReps", "daysRemaining", "kata"],
+  props: ["goalReps", "daysRemaining", "kata", "counterStyle"],
   methods: {
     decrementEvent() {
       if (this.kata.reps == 0) return;
@@ -35,9 +35,7 @@ export default {
     lastUpdatedString() {
       if (this.kata.history) {
         const hist = this.kata.history[this.kata.history.length - 1];
-        return `Last Updated: ${moment(hist.date).format(
-          "HH:mm:ss, D/MM/YYYY"
-        )}`;
+        return `Updated: ${moment(hist.date).format("H:m:s, D/MM/YYYY")}`;
       }
       return "";
     },
@@ -51,32 +49,78 @@ export default {
 </script>
 
 <template>
-  <div class="card">
-    <div
-      class="belt"
-      :class="classObject"
-    ></div>
-    <div class="content">
-      <div class="name">{{ kata.name }}</div>
-      {{lastUpdatedString}}
-      <div class="count">{{ kata.reps }}/{{ goalReps }} reps</div>
-      <div class="prescription">{{ requiredReps }}</div>
-    </div>
-    <div class="btn-cont">
+  <div
+    class="kata"
+    :class="counterStyle"
+  >
+    <template v-if="counterStyle == 'card'">
       <div
-        class="btn"
-        @click="editKataEvent"
-      >Edit</div>
-      <div class="divider"></div>
+        class="belt"
+        :class="classObject"
+      ></div>
+      <div class="content">
+        <div class="name">{{ kata.name }}</div>
+        <div class="count">{{ kata.reps }}/{{ goalReps }} reps</div>
+        <div class="prescription">{{ requiredReps }}</div>
+        {{lastUpdatedString}}
+      </div>
+      <div class="btn-cont">
+        <div
+          class="increment-btn btn"
+          @click="decrementEvent"
+        >-1</div>
+        <div class="divider"></div>
+        <div
+          class="btn"
+          @click="editKataEvent"
+        >Edit</div>
+        <div class="divider"></div>
+        <div
+          class="increment-btn btn"
+          @click="incrementEvent"
+        >+1</div>
+      </div>
+    </template>
+    <template v-else-if="counterStyle == 'rightHanded'">
       <div
-        class="increment-btn btn"
-        @click="incrementEvent"
-      >+1</div>
-    </div>
+        class="belt"
+        :class="classObject"
+      ></div>
+      <div class="content">
+        <div class="inner">
+
+          <div class="name">{{ kata.name }}</div>
+          <div class="count">{{ kata.reps }}/{{ goalReps }} reps</div>
+          <div class="prescription">{{ requiredReps }}</div>
+          <div class="updated">
+            {{lastUpdatedString}}
+          </div>
+          <div
+            class="btn"
+            @click="editKataEvent"
+          >Edit</div>
+
+        </div>
+      </div>
+      <div class="btn-cont">
+        <div
+          class="increment-btn btn"
+          @click="incrementEvent"
+        >+1</div>
+        <div class="divider"></div>
+        <div
+          class="decrement-btn btn"
+          @click="decrementEvent"
+        >-1</div>
+      </div>
+    </template>
   </div>
 </template>
 
 <style scoped>
+.kata {
+  overflow: hidden;
+}
 .button {
   user-select: none;
   border: 1px solid var(--base-font-colour);
@@ -119,6 +163,10 @@ export default {
 
 .show .tab {
   height: 148px;
+}
+
+.divider {
+  border: 1px solid #ccc;
 }
 
 @media (max-width: 403px) {
@@ -239,12 +287,11 @@ export default {
   user-select: none;
   border: 1px solid #ccc;
   border-radius: 8px;
-  min-width: 160px;
   font-size: 16px;
   line-height: 1.3;
   color: #666;
   background: white;
-  flex: 1 1;
+  flex: 1 0 100%;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -275,10 +322,6 @@ export default {
   border-top: 2px solid #ccc;
 }
 
-.card .divider {
-  border: 1px solid #ccc;
-}
-
 .card .btn {
   cursor: pointer;
   padding: 3px;
@@ -286,5 +329,51 @@ export default {
   vertical-align: center;
   color: black;
   flex: 1 0;
+}
+</style>
+
+<style scoped>
+.rightHanded {
+  width: 100%;
+  border: 1px solid black;
+  display: flex;
+  border-radius: 0 20px 20px 0;
+  box-shadow: 1px 1px 3px #aaa;
+}
+
+.rightHanded .belt {
+  width: 30px;
+}
+
+.rightHanded .content {
+  text-align: left;
+}
+
+.rightHanded .inner {
+  line-height: 1.2;
+}
+.rightHanded .name {
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+.rightHanded .count {
+  color: #666;
+}
+.rightHanded .prescription {
+  color: #666;
+}
+.rightHanded .updated {
+  color: #666;
+}
+
+.rightHanded .btn-cont {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #ccc;
+}
+.rightHanded .btn-cont .btn {
+  padding: 20px 12px;
+  flex: 1;
 }
 </style>

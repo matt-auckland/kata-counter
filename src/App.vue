@@ -77,7 +77,8 @@
           :kata="k"
           :goalReps="k.defaultGoalReps ? settings.defaultRepsGoal : k.goalReps"
           :daysRemaining="k.defaultGoalDate ? settings.defaultDaysRemaining : calculateDaysRemaining(k.goalDate)"
-        ></CounterButton>
+          counterStyle="card"
+        />
       </div>
     </template>
 
