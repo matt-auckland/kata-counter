@@ -27,6 +27,7 @@
         @input="updateSetting('pretendNoKata', !settingsClone.pretendNoKata)"
       ></label> -->
     <button @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a new Kata</button>
+    <button @click.prevent="emitUpdateModal('edit-tags', 'Edit Tags')">Add or delete tags</button>
     <button @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load Kata from a template</button>
     <button @click.prevent="emitUpdateModal('import-json', 'Import back up JSON data')">Import back up data from JSON</button>
     <button @click.prevent="emitUpdateModal('export-json', 'Back up data as JSON')">Back up data as JSON</button>

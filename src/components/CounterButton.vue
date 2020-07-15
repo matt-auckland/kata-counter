@@ -35,7 +35,7 @@ export default {
     lastUpdatedString() {
       if (this.kata.history) {
         const hist = this.kata.history[this.kata.history.length - 1];
-        return `Updated: ${moment(hist.date).format("H:m:s, D/MM/YYYY")}`;
+        return `Last Updated: ${moment(hist.date).format("HH:m:s, D/MM/YYYY")}`;
       }
       return "";
     },
@@ -308,7 +308,6 @@ export default {
   padding: 0;
   width: 100%;
   height: 8px;
-  /* background-color: green; */
 }
 
 .name {

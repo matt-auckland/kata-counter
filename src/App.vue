@@ -20,7 +20,7 @@
           :value="false"
         >Show All Kata</option>
         <option
-          v-for="tag in tagPool"
+          v-for="tag in settings.tagPool"
           :key="tag"
           :value="tag"
         >{{
@@ -110,16 +110,21 @@
             <template v-if="modal.state == 'ADD-KATA'">
               <KataEditor
                 @saveKata="saveKata($event, true)"
+                @hideModal="hideModal"
                 @cancelEdit="cancelEdit"
+                :tagPool="settings.tagPool"
               />
             </template>
 
             <template v-if="modal.state == 'EDIT-KATA'">
               <KataEditor
                 @saveKata="saveKata"
+                @hideModal="hideModal"
                 @cancelEdit="cancelEdit"
                 @deleteKata="deleteKata($event)"
+                @routeAndAddTag="routeAndAddTag"
                 :targetKata="selectedKata"
+                :tagPool="settings.tagPool"
               />
             </template>
 
@@ -219,6 +224,22 @@
                 </div>
               </div>
             </template>
+            <template v-else-if="modal.state == 'EDIT-TAGS'">
+              Create New Tag
+              <form @submit.prevent="createNewTag">
+                <label for="newTag">
+                  New Tag Name
+                <input type="text" name="newTag" id="newTag" placeholder="Type a new tag" v-model="draftTag">
+                </label>
+                <button>Add Tag</button>
+              </form>
+              <form @submit.prevent="() => {}">
+                <div v-for="tag in settings.tagPool" :key="tag">
+                  <span>{{tag | capitalize}}</span>
+                  <button @click="deleteTag(tag)">Delete</button>
+                </div>
+              </form>
+            </template>
           </div>
         </transition>
       </div>
@@ -242,15 +263,10 @@ export default {
     SettingsPage,
     KataEditor
   },
-  filters: {
-    capitalize(str) {
-      if (!str) return "";
-      return str[0].toUpperCase() + str.slice(1);
-    }
-  },
   methods: {
     // kata counter
     updateKataHist(kata) {
+      if (!kata.history) kata.history = [];
       kata.history.push({
         count: kata.reps,
         date: moment()
@@ -259,14 +275,14 @@ export default {
     increment(kataId) {
       const kata = this.kataList.filter(k => k.id === kataId)[0];
       kata.reps++;
-      this.updateKataHist();
+      this.updateKataHist(kata);
       this.updateKataStorage(this.kataList);
     },
     decrement(kataId) {
       const kata = this.kataList.filter(k => k.id === kataId)[0];
       if (kata.reps == 0) return;
       kata.reps--;
-      this.updateKataHist();
+      this.updateKataHist(kata);
 
       this.updateKataStorage(this.kataList);
     },
@@ -274,13 +290,14 @@ export default {
     importFromJSON() {
       this.dataJSONError = "";
 
-      const vm = this;
+      const ctrl = this;
       let parsedData;
 
       try {
-        parsedData = JSON.parse(vm.dataJSON);
+        parsedData = JSON.parse(ctrl.dataJSON);
         this.updateKataStorage(parsedData.kata);
-        this.updateSettingsStorage(parsedData.settings);
+        this.settings = parsedData.settings;
+        this.updateSettingsStorage();
         this.dataJSON = "";
         this.hideModal();
       } catch (e) {
@@ -311,8 +328,12 @@ export default {
     // editing kata
     saveKata(draftKata, isNewKata) {
       if (typeof draftKata.tags == "string") {
-        draftKata.tags = draftKata.tags.split(",").filter(tag => tag);
+        draftKata.tags = draftKata.tags.split(",");
       }
+      draftKata.tags = draftKata.tags.reduce((accum, tag) => {
+        if (tag && !accum.includes(tag)) accum.push(tag);
+        return accum;
+      }, []);
 
       if (isNewKata) this.updateKataHist(draftKata);
 
@@ -330,10 +351,7 @@ export default {
           }
         }
       }
-
       this.updateKataStorage(this.kataList);
-      this.hideModal();
-      this.selectedKata = null;
     },
     deleteKata(kata) {
       if (kata && !Number.isNaN(kata.id)) {
@@ -376,7 +394,6 @@ export default {
     updateKataStorage(kataData) {
       this.storage.setItem("kata", JSON.stringify(kataData));
       this.kataList = JSON.parse(this.storage.getItem("kata"));
-      this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
     },
     calculateDaysRemaining(date) {
       const daysRemaining = moment(date).diff(moment(), "days");
@@ -393,6 +410,39 @@ export default {
       var copyText = document.querySelector("#dataJSON");
       copyText.select();
       document.execCommand("copy");
+    },
+    routeAndAddTag() {
+      this.tab = "SETTINGS";
+      this.updateModalState("edit-tags", "Edit Tags");
+    },
+    deleteTag(tag) {
+      if (this.settings.tagPool.includes(tag)) {
+        this.settings.tagPool = this.settings.tagPool.filter(t => t != tag);
+      }
+      this.updateSettingsStorage();
+
+      const ctrl = this;
+
+      this.kataList.forEach(function(kata) {
+        if (kata.tags.includes(tag)) {
+          kata.tags = kata.tags.filter(t => t != tag);
+          ctrl.saveKata(kata);
+        }
+      });
+      if (this.filterTag == tag) this.filterTag = false;
+    },
+    createNewTag() {
+      const newTag = this.draftTag.toLowerCase();
+
+      if (!this.settings.tagPool.includes(newTag)) {
+        this.settings.tagPool.push(newTag);
+        this.settings.tagPool = this.settings.tagPool.reduce((accum, tag) => {
+          if (tag && !accum.includes(tag)) accum.push(tag);
+          return accum;
+        }, []);
+      }
+      this.draftTag = null;
+      this.updateSettingsStorage();
     },
 
     // modal related
@@ -433,6 +483,7 @@ export default {
           this.modal.scrollTop = null;
         }
       });
+      this.selectedKata = null;
     },
 
     modalBodyAfterLeave() {
@@ -445,34 +496,60 @@ export default {
     },
 
     updateDataScheme(kata) {
-      let didUpdate = false;
-
       if (!this.settings.schemaVersion) {
         this.settings.schemaVersion = 1;
-        didUpdate = true;
-      }
 
-      let parsedKata = JSON.parse(kata);
-      parsedKata = parsedKata.map(k => {
-        if (!k.history) {
-          k.history = [
-            {
-              count: k.reps,
-              date: k.lastUpdated || moment()
-            }
-          ];
-          delete k.lastUpdated;
-          didUpdate = true;
-        }
+        let parsedKata = JSON.parse(kata);
+        parsedKata = parsedKata.map(k => {
+          if (!k.history) {
+            k.history = [
+              {
+                count: k.reps,
+                date: k.lastUpdated || moment()
+              }
+            ];
+            delete k.lastUpdated;
+          }
 
-        if (k.lastUpdated) delete k.lastUpdated;
+          if (k.lastUpdated) delete k.lastUpdated;
 
-        return k;
-      });
-
-      if (didUpdate) {
+          return k;
+        });
         this.updateKataStorage(parsedKata);
         this.updateSettingsStorage();
+      } else if (this.settings.schemaVersion < 3) {
+        let tempTagPool = [];
+        // Copy tags from kata to settings
+        // Convert lastUpdated to history if kata doesn't have history
+        let tempKata = JSON.parse(kata);
+        tempKata.forEach(kata => {
+          tempTagPool.push(...kata.tags);
+          if (!kata.history) {
+            kata.history = [];
+
+            if (kata.lastUpdated) {
+              kata.history.push({
+                count: kata.reps,
+                date: moment(kata.lastUpdated)
+              });
+              delete kata.lastUpdated;
+            } else {
+              kata.history.push({
+                count: kata.reps,
+                date: moment()
+              });
+            }
+          }
+        });
+
+        // dedupe any tags and make them all lowercase
+        this.settings.tagPool = tempTagPool.reduce((accum, tag) => {
+          if (!accum.includes(tag)) accum.push(tag.toLowerCase());
+          return accum;
+        }, []);
+
+        this.updateSettingsStorage();
+        this.updateKataStorage(tempKata);
       }
     }
   },
@@ -511,34 +588,18 @@ export default {
 
     if (settings) {
       this.settings = JSON.parse(settings);
-      if (
-        !this.settings.schemaVersion ||
-        this.settings.schemaVersion < this.SCHEMA_VERSION
-      ) {
-        this.updateDataScheme(kata);
-      }
-    } else {
-      this.settings.defaultEndDate = moment().add(1, "years");
-      this.updateDefaultDaysRemaining();
-      this.settings.pretendNoKata = false;
-      this.settings.defaultRepsGoal = 100;
-      this.settings.schemaVersion = this.SCHEMA_VERSION;
-
-      this.updateSettingsStorage();
     }
 
     if (kata) {
       this.kataList = JSON.parse(kata);
-      this.tagPool = new Set(this.kataList.flatMap(k => k.tags));
     }
   },
 
   data() {
     return {
-      SCHEMA_VERSION: 1,
       storage: null, // localStorage reference
 
-      tagPool: null,
+      draftTag: null,
       filterTag: false,
       kataList: [],
 
@@ -546,7 +607,8 @@ export default {
         pretendNoKata: null,
         defaultEndDate: null,
         defaultDaysRemaining: null,
-        defaultRepsGoal: null
+        defaultRepsGoal: null,
+        tagPool: []
       },
       bodyStyle: "",
       modal: {
@@ -715,6 +777,7 @@ input {
 .flex-label {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .flex-col-center {
