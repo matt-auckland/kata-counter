@@ -588,6 +588,7 @@ export default {
 
     if (settings) {
       this.settings = JSON.parse(settings);
+      this.updateDefaultDaysRemaining();
     }
 
     if (kata) {
