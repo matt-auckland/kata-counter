@@ -3,6 +3,7 @@ const testData = {
   kata: [
     {
       name: "Gekisai Dai Ichi",
+      listPosition: 0,
       tags: ["goju", "kaishugata"],
       reps: 26,
       colour: "blue",
@@ -12,10 +13,11 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Sanchin",
+      listPosition: 1,
       tags: ["goju", "heishugata"],
       reps: 14,
       colour: "black",
@@ -25,10 +27,11 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Sanchin Dai Ni",
+      listPosition: 2,
       tags: ["goju", "heishugata"],
       reps: 3,
       colour: "black",
@@ -38,10 +41,11 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Tensho",
+      listPosition: 3,
       tags: ["goju", "heishugata"],
       reps: 12,
       colour: "black",
@@ -51,10 +55,11 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Maezato no Tekko",
+      listPosition: 4,
       tags: ["weapons", "tekko"],
       reps: 10,
       colour: "brown",
@@ -64,10 +69,11 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Shushi no Kon (Sho)",
+      listPosition: 5,
       tags: ["weapons", "bo"],
       reps: 10,
       colour: "brown",
@@ -77,10 +83,11 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Chikin Shita Haku no Sai",
+      listPosition: 7,
       tags: ["weapons", "sai"],
       reps: 10,
       colour: "brown",
@@ -90,10 +97,11 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Maezato no Nunchaku",
+      listPosition: 6,
       tags: ["weapons", "nunchaku"],
       reps: 10,
       colour: "brown",
@@ -103,9 +111,9 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
-    }
-  ]
+      id: null,
+    },
+  ],
 };
 
 const gojuKata = {
@@ -123,7 +131,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Gekisai Dai Ni",
@@ -137,7 +145,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Saifa",
@@ -151,7 +159,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Seiyunchin",
@@ -165,7 +173,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Shisochin",
@@ -179,7 +187,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Sanseiru",
@@ -193,7 +201,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
 
     {
@@ -208,7 +216,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Kururunfa",
@@ -222,7 +230,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Seisan",
@@ -236,7 +244,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Superinpei",
@@ -250,7 +258,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Sanchin",
@@ -264,7 +272,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Sanchin Dai Ni",
@@ -277,7 +285,7 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Tensho",
@@ -291,9 +299,9 @@ const gojuKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
-    }
-  ]
+      id: null,
+    },
+  ],
 };
 
 const kobudoKata = {
@@ -311,7 +319,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Akimine Kihon Sai",
@@ -325,7 +333,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Akimine Kihon Bo Ichi (Left Handed)",
@@ -339,7 +347,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Akimine Kihon Sai Ni",
@@ -353,7 +361,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Maezato no Tekko",
@@ -367,7 +375,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Akimine Kihon Bo Ni",
@@ -381,7 +389,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Akimine Kihon Bo Ni (Left handed)",
@@ -395,7 +403,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Shushi no Kon (Sho)",
@@ -409,7 +417,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Chikin Shita Haku no Sai",
@@ -423,7 +431,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Maezato no Nunchaku",
@@ -437,7 +445,7 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Akimine no Nunchaku",
@@ -451,9 +459,9 @@ const kobudoKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
-    }
-  ]
+      id: null,
+    },
+  ],
 };
 
 const shotokanKata = {
@@ -471,7 +479,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Heian Nidan",
@@ -485,7 +493,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Heian Sandan",
@@ -499,7 +507,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Heian Yondan",
@@ -513,7 +521,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Heian Godan",
@@ -527,7 +535,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Tekki Shodan",
@@ -541,7 +549,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Tekki Nidan",
@@ -555,7 +563,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Tekki Sandan",
@@ -569,7 +577,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Bassai Dai",
@@ -583,7 +591,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Bassai Sho",
@@ -597,7 +605,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Kanku Dai",
@@ -611,7 +619,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Kanku Sho",
@@ -625,7 +633,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Enpi",
@@ -639,7 +647,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Jiin",
@@ -653,7 +661,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Gankaku",
@@ -667,7 +675,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Hangetsu",
@@ -681,7 +689,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Jitte",
@@ -695,7 +703,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Chinte",
@@ -709,7 +717,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Sochin",
@@ -723,7 +731,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Meikyo",
@@ -737,7 +745,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Jion",
@@ -751,7 +759,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Gojushiho Dai",
@@ -765,7 +773,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Gojushiho Sho",
@@ -779,7 +787,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Nijushiho",
@@ -793,7 +801,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Wankan",
@@ -807,7 +815,7 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
+      id: null,
     },
     {
       name: "Unsu",
@@ -821,16 +829,16 @@ const shotokanKata = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null
-    }
-  ]
+      id: null,
+    },
+  ],
 };
 
 const templateKata = {
   testData,
   gojuKata,
   kobudoKata,
-  shotokanKata
+  shotokanKata,
 };
 
 export default templateKata;
