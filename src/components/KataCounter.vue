@@ -104,7 +104,7 @@ export default {
     <div class="content">
       <div class="inner">
         <div>
-          <span class="name">{{ kata.name }} #{{kata.listPosition}}</span>
+          <span class="name">{{ kata.name }}</span>
           <span class="count">
             {{ kata.reps }}/{{ kata.goalReps || $root.settings.defaultGoalReps }} reps
           </span>
@@ -170,6 +170,7 @@ export default {
   --font-color: white;
   --title-color: white;
   color: var(--font-color);
+  cursor: move;
 }
 
 .content {

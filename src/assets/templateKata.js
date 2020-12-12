@@ -3,7 +3,6 @@ const testData = {
   kata: [
     {
       name: "Gekisai Dai Ichi",
-      listPosition: 0,
       tags: ["goju", "kaishugata"],
       reps: 26,
       colour: "blue",
@@ -17,7 +16,6 @@ const testData = {
     },
     {
       name: "Sanchin",
-      listPosition: 1,
       tags: ["goju", "heishugata"],
       reps: 14,
       colour: "black",
@@ -31,7 +29,6 @@ const testData = {
     },
     {
       name: "Sanchin Dai Ni",
-      listPosition: 2,
       tags: ["goju", "heishugata"],
       reps: 3,
       colour: "black",
@@ -45,7 +42,6 @@ const testData = {
     },
     {
       name: "Tensho",
-      listPosition: 3,
       tags: ["goju", "heishugata"],
       reps: 12,
       colour: "black",
@@ -59,7 +55,6 @@ const testData = {
     },
     {
       name: "Maezato no Tekko",
-      listPosition: 4,
       tags: ["weapons", "tekko"],
       reps: 10,
       colour: "brown",
@@ -73,7 +68,6 @@ const testData = {
     },
     {
       name: "Shushi no Kon (Sho)",
-      listPosition: 5,
       tags: ["weapons", "bo"],
       reps: 10,
       colour: "brown",
@@ -87,7 +81,6 @@ const testData = {
     },
     {
       name: "Chikin Shita Haku no Sai",
-      listPosition: 7,
       tags: ["weapons", "sai"],
       reps: 10,
       colour: "brown",
@@ -101,7 +94,6 @@ const testData = {
     },
     {
       name: "Maezato no Nunchaku",
-      listPosition: 6,
       tags: ["weapons", "nunchaku"],
       reps: 10,
       colour: "brown",
