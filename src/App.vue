@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <App-Header />
     <div id="view">
       <transition name="slide">
         <router-view />
@@ -12,10 +11,9 @@
 
 <script>
 import Navigation from "./components/Navigation";
-import AppHeader from "./components/App-Header";
 
 export default {
-  components: { Navigation, AppHeader },
+  components: { Navigation },
 };
 </script>
 

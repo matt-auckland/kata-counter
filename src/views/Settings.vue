@@ -8,15 +8,11 @@
         v-model="settingsClone.defaultRepsGoal"
         type="number"
       ></label> -->
-    <label
-      class="flex-label"
-      for="defaultenddate"
-    >Default Goal End Date<input
-        @change="updateDate"
-        v-model="endDate"
-        type="date"
-      ></label>
-    <UIInput></UIInput>
+    <UIInput
+      v-model="endDate"
+      label="Default Goal End Date"
+      type="date"
+    ></UIInput>
     <!-- <label
       class="flex-label"
       for="pretendnokata"

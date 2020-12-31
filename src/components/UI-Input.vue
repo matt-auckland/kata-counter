@@ -1,16 +1,27 @@
 <template>
   <div class="ui-input">
-    <label
-      class="flex-label"
-      :for="defaultenddate"
-    >Default Goal End Date<input
+    <label class="flex-label">{{label}}<input
         @change="updateDate"
-        v-model="endDate"
-        type="date"
+        @input="updateValue($event.target.value)"
+        :value="value"
+        :type="type"
       ></label>
   </div>
 </template>
-
+<script>
+export default {
+  props: {
+    label: String,
+    type: String,
+    value: String,
+  },
+  methods: {
+    updateValue: function (value) {
+      this.$emit("input", value);
+    },
+  },
+};
+</script>
 <style scoped>
 .ui-input {
   font-size: 14px;
