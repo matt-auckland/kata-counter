@@ -1,13 +1,15 @@
 <template>
-  <form action="() => {}">
-    <!-- <label
-      class="flex-label"
-      for="defaultRepsGoal"
-    >Default Goal Reps<input
-        @input="updateSetting('defaultRepsGoal', settingsClone.defaultRepsGoal)"
-        v-model="settingsClone.defaultRepsGoal"
-        type="number"
-      ></label> -->
+  <form
+    id="settings"
+    action="javascript:;"
+  >
+
+    <UIInput
+      @input="updateSetting('defaultGoalReps', settingsClone.defaultGoalReps)"
+      v-model="settingsClone.defaultGoalReps"
+      type="number"
+      label="Default Goal Reps"
+    ></UIInput>
     <UIInput
       v-model="endDate"
       label="Default Goal End Date"
@@ -26,9 +28,9 @@
 
     <UIButton @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a new Kata</UIButton>
     <UIButton @click.prevent="emitUpdateModal('edit-tags', 'Edit Tags')">Add or delete tags</UIButton>
-    <UIButton @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load Kata from a template</UIButton>
-    <UIButton @click.prevent="emitUpdateModal('import-json', 'Import back up JSON data')">Import back up data from JSON</UIButton>
-    <UIButton @click.prevent="emitUpdateModal('export-json', 'Back up data as JSON')">Back up data as JSON</UIButton>
+    <!-- <UIButton @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load Kata from a template</UIButton> -->
+    <UIButton @click.prevent="emitUpdateModal('import-json', 'Import back up JSON data')">Import data from JSON</UIButton>
+    <UIButton @click.prevent="emitUpdateModal('export-json', 'Back up data as JSON')">Export data as JSON</UIButton>
   </form>
 </template>
 
@@ -49,7 +51,7 @@ export default {
     settings: {
       deep: true,
       handler() {
-        console.log("triggered");
+        console.log("settings updated");
 
         this.loadSettings();
       },
@@ -66,8 +68,7 @@ export default {
       this.$emit("updateSetting", key, data);
     },
     loadSettings() {
-      this.settingsClone = JSON.parse(JSON.stringify(this.settings));
-
+      this.settingsClone = JSON.parse(JSON.stringify(this.$root.settings));
       this.endDate = moment(this.settingsClone.defaultEndDate).format(
         "YYYY-MM-DD"
       );

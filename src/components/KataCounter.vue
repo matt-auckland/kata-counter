@@ -132,16 +132,16 @@ export default {
       >
         <div
           class="btn left"
-          @click.prevent="incrementEvent"
-        >+1</div>
+          @click.prevent="decrementEvent"
+        >-1</div>
         <router-link
           class="btn"
           :to="'/edit/' + kata.id"
         >Edit</router-link>
         <div
           class="btn right"
-          @click.prevent="decrementEvent"
-        >-1</div>
+          @click.prevent="incrementEvent"
+        >+1</div>
       </div>
     </div>
   </div>
@@ -170,7 +170,7 @@ export default {
   --font-color: white;
   --title-color: white;
   color: var(--font-color);
-  cursor: move;
+  /* cursor: move; */
 }
 
 .content {

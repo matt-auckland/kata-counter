@@ -3,97 +3,61 @@
     <div class="tabs">
       <div
         class="tab"
-        :class="{selected: tab == 'general'}"
-        @click="selectTab('general')"
-      >General</div>
+        :class="{selected: tab == 'edit'}"
+        @click="selectTab('edit')"
+      >Edit</div>
       <div
         class="tab"
         :class="{selected: tab == 'history'}"
         @click="selectTab('history')"
       >History</div>
-      <div
-        class="tab"
-        :class="{selected: tab == 'advanced'}"
-        @click="selectTab('advanced')"
-      >Advanced</div>
     </div>
 
-    <template v-if="tab == 'general'">
-      <h3 class="sub-title">General Options</h3>
-      <form action="() => {}">
+    <template v-if="tab == 'edit'">
+      <form action="javascript:;">
+        <UIInput
+          type="text"
+          name="name"
+          :label="'Kata Name:'"
+          placeholder="Enter a kata name here"
+          v-model="draftKata.name"
+        ></UIInput>
+        <UIInput
+          type="number"
+          name="reps"
+          :label="'Repetitions:'"
+          v-model.number="draftKata.reps"
+        ></UIInput>
+        <UIInput
+          type="checkbox"
+          id="defaultReps"
+          label="Use default repetitions goal:"
+          v-model="draftKata.defaultGoalReps"
+        ></UIInput>
 
-        <label
-          for="name"
-          class="flex-label"
-        >
-          <span>Kata Name:</span>
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter a kata name here"
-            v-model="draftKata.name"
-          ></label>
-        <label
-          for="reps"
-          class="flex-label"
-        >
-          <span>Repetitions:</span>
-          <input
-            type="number"
-            name="reps"
-            v-model.number="draftKata.reps"
-          ></label>
-        <label
-          for="defaultReps"
-          class="flex-label"
-        >
-          <span>Use default repetitions goal:</span>
-          <input
-            type="checkbox"
-            id="defaultReps"
-            v-model="draftKata.defaultGoalReps"
-          ></label>
-
-        <label
-          for="goal"
-          class="flex-label"
+        <UIInput
           v-if="!draftKata.defaultGoalReps"
-        >
-          <span>Goal Repetitions:</span>
-          <input
-            type="number"
-            name="goal"
-            v-model.number="draftKata.goalReps"
-          ></label>
+          type="number"
+          name="goal"
+          label="Goal Repetitions:"
+          v-model.number="draftKata.goalReps"
+        ></UIInput>
 
-        <label
-          for="defaultDate"
-          class="flex-label"
-        >
-          <span>Use default end date for goal date:</span>
-          <input
-            type="checkbox"
-            id="defaultDate"
-            v-model="draftKata.defaultGoalDate"
-          ></label>
-        <label
-          for="goalDate"
-          class="flex-label"
+        <UIInput
+          type="checkbox"
+          label="Use default end date for goal date:"
+          id="defaultDate"
+          v-model="draftKata.defaultGoalDate"
+        ></UIInput>
+        <UIInput
           v-if="!draftKata.defaultGoalDate"
-        >
-          <span>Goal Date:</span>
-          <input
-            type="date"
-            name="goalDate"
-            v-model="draftKata.goalDate"
-          ></label>
-        <label
-          for="colour"
-          class="flex-label"
-        >
-          <span>Colour:</span>
-        </label>
+          type="date"
+          label="Goal Date:"
+          name="goalDate"
+          v-model="draftKata.goalDate"
+        ></UIInput>
         <div class="colour-container">
+          <div class="colour-container-title">Accent Colour:</div>
           <div
             v-for="colour in colours"
             :key="colour"
@@ -102,27 +66,43 @@
             @click="selectColour(colour)"
           ></div>
         </div>
-        <!-- <label
-      for="tabs"
-      class="flex-label"
-    >
-      <span>Belt Tabs:</span>
-      <input
-        type="number"
-        name="tabs"
-        v-model.number="draftKata.tabs"
-      ></label> -->
 
-        <button @click.prevent="saveKata">Save</button>
-        <button @click.prevent="cancelEdit">Cancel</button>
+        <!-- <UIButton @click="saveKata">Save</UIButton> -->
+        <!-- <UIButton @click="cancelEdit">Cancel</UIButton> -->
+
+        <div class="tag-pool">
+          <div class="tag-pool-title">Kata Tags<span v-if="tagPool && tagPool.length">, tap to select</span></div>
+          <span
+            class="tag-bubble"
+            :class="{ selected: draftKata.tags.includes(tag) }"
+            v-for="tag in tagPool"
+            :key="tag"
+            @click="selectTag(tag)"
+          >{{tag | capitalize}}</span>
+
+          <div v-if="!tagPool || !tagPool.length">
+            No tags found, tap below to add some!
+          </div>
+        </div>
+
+        <UIButton @click="routeAndAddTag">Create new Kata Tag</UIButton>
+
+        <UIButton @click="saveKata">Save Changes</UIButton>
+
+        <UIButton @click="cancelEdit">Discard Edits</UIButton>
+
+        <UIButton @click="deleteKata">Delete Kata</UIButton>
       </form>
     </template>
 
     <template v-else-if="tab == 'history'">
-      <h3 class="subtitle">
-        Kata rep history
-      </h3>
-      <div class="list-cont">
+      <div v-if="!kataHistoryReversed.length">
+        No reps recorded for this Kata yet.
+      </div>
+      <div
+        v-else
+        class="list-cont"
+      >
         <table>
           <th>Reps</th>
           <th>Date</th>
@@ -140,69 +120,43 @@
         </table>
       </div>
     </template>
-
-    <template v-else-if="tab == 'advanced'">
-      <h3 class="sub-title">Advanced Options</h3>
-
-      <form action="javascript:;">
-        <div>Kata Tags, tap to select</div>
-        <div class="tag-pool">
-          <span
-            class="tag-bubble"
-            :class="{ selected: draftKata.tags.includes(tag) }"
-            v-for="tag in tagPool"
-            :key="tag"
-            @click="selectTag(tag)"
-          >{{tag | capitalize}}</span>
-        </div>
-
-        <button @click.prevent="routeAndAddTag">Create new tags</button>
-
-        <button
-          v-if="targetKata"
-          @click.prevent="deleteKata"
-        >Delete Kata</button>
-
-      </form>
-    </template>
-
   </div>
-
 </template>
 
 
 <script>
 import moment from "moment";
+import UIButton from "../components/UI-Button";
+import UIInput from "../components/UI-Input.vue";
 
 export default {
   props: {
-    targetKata: {
-      type: Object
-    },
     tagPool: {
-      type: Array
-    }
+      type: Array,
+    },
   },
+  components: { UIButton, UIInput },
   methods: {
     selectTab(tabName) {
       this.tab = tabName;
-      this.resetKata();
+      // this.cloneOriginalKata();
     },
     cancelEdit() {
-      this.$emit("cancelEdit");
+      this.$router.push("/");
     },
-    saveKata(hideModal = true) {
-      const ctrl = this;
-      this.disableEdits = true;
-      this.$emit("saveKata", this.draftKata);
-      if (hideModal) {
-        setTimeout(function() {
-          ctrl.$emit("hideModal");
-        }, 100);
+    saveKata(returnHome = true) {
+      this.disableForm = true;
+      this.$root.saveKata(this.draftKata);
+      if (returnHome) {
+        this.$router.push("/");
       }
+      this.disableForm = false;
     },
     deleteKata() {
-      this.$emit("deleteKata", this.draftKata);
+      if (window.confirm("Are you sure you want to delete this Kata?")) {
+        this.$root.deleteKata(this.draftKata.id);
+        this.$router.push("/");
+      }
     },
     kataColourClass(colour) {
       const classes = [];
@@ -221,7 +175,7 @@ export default {
     selectTag(tag) {
       if (this.draftKata.tags.includes(tag)) {
         console.log(`remove tag ${tag}`);
-        this.draftKata.tags = this.draftKata.tags.filter(t => t != tag);
+        this.draftKata.tags = this.draftKata.tags.filter((t) => t != tag);
       } else {
         console.log(`add tag ${tag}`);
         this.draftKata.tags.push(tag);
@@ -232,19 +186,25 @@ export default {
     routeAndAddTag() {
       this.$emit("routeAndAddTag");
     },
-    resetKata() {
-      this.draftKata = JSON.parse(JSON.stringify(this.targetKata));
-    }
+    cloneOriginalKata() {
+      this.draftKata = JSON.parse(
+        JSON.stringify(this.$root.getKataById(this.$route.params.id))
+      );
+    },
   },
 
   created() {
-    if (this.targetKata) {
-      this.resetKata();
+    if (!this.$route.params.id) {
+      this.$router.push("/"); //redirect to home if we can't find kata
+    } else {
+      this.cloneOriginalKata();
+      if (this.draftKata == null) this.$router.push("/"); //redirect to home if we can't find kata
     }
   },
   data() {
     return {
-      tab: "general",
+      disableForm: false,
+      tab: "edit",
       draftKata: {
         name: "",
         reps: 0,
@@ -255,7 +215,7 @@ export default {
         tabs: 0,
         colour: "white",
         tags: [],
-        id: Date.now()
+        id: Date.now(),
       },
       colours: [
         "purple",
@@ -267,7 +227,7 @@ export default {
         "green",
         "black",
         "white",
-        "grey"
+        "grey",
         // "white",
         // "blue",
         // "dark-blue",
@@ -278,13 +238,14 @@ export default {
         // "brown",
         // "dark-brown",
         // "black"
-      ]
+      ],
     };
   },
   computed: {
     kataHistoryReversed() {
+      if (!this.draftKata.history) return [];
       let reversed = this.draftKata.history
-        .map(e => {
+        .map((e) => {
           e.time = moment(e.date).format("HH:mm:ss");
           e.date = moment(e.date).format("D/MM/YYYY");
           return e;
@@ -294,8 +255,8 @@ export default {
     },
     kataHistoryShort() {
       return this.kataHistoryReversed.slice(0, 10);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -340,30 +301,36 @@ export default {
   column-width: 33%;
   text-align: left;
 }
+
 table,
 td,
 th {
   border-collapse: collapse;
 }
+
 th,
 td {
   padding: 10px;
   border: solid 1px;
 }
 
-.subtitle {
-  margin: 0 0 10px 0;
-}
-
 .tag-pool {
-  border: 1px solid #333;
+  border-radius: 5px;
+  background: #2c2c46b4;
+  padding: 8px;
   border-radius: 6px;
-  padding: 12px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  width: 100%;
   min-height: 30px;
+  color: #fff;
+}
+
+.tag-pool-title {
+  width: 100%;
+  color: #fff;
+  text-align: left;
+  margin: 0 0 10px;
 }
 
 .tag-bubble {
@@ -392,13 +359,22 @@ td {
   cursor: pointer;
 }
 
+.colour-container-title {
+  width: 100%;
+  color: #fff;
+  text-align: left;
+  margin: 0 0 10px;
+}
+
 .colour-container {
+  font-size: 14px;
+  font-family: sans-serif;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   border-radius: 5px;
-  background: #a9a9a9;
-  padding: 8px 0px;
+  background: #2c2c46b4;
+  padding: 8px;
 }
 
 .colour-circle.selected-colour {

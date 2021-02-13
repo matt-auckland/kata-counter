@@ -12,7 +12,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 1,
     },
     {
       name: "Sanchin",
@@ -25,7 +25,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 2,
     },
     {
       name: "Sanchin Dai Ni",
@@ -38,7 +38,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 3,
     },
     {
       name: "Tensho",
@@ -51,7 +51,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 4,
     },
     {
       name: "Maezato no Tekko",
@@ -64,7 +64,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 5,
     },
     {
       name: "Shushi no Kon (Sho)",
@@ -77,7 +77,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 6,
     },
     {
       name: "Chikin Shita Haku no Sai",
@@ -90,7 +90,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 7,
     },
     {
       name: "Maezato no Nunchaku",
@@ -103,7 +103,7 @@ const testData = {
       defaultGoalReps: true,
       defaultGoalDate: true,
       lastUpdated: null,
-      id: null,
+      id: 8,
     },
   ],
 };

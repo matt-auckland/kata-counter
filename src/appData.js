@@ -1,8 +1,8 @@
-import templateKata from "./assets/templateKata";
+// import templateKata from './assets/templateKata';
 
 const appData = {
   settings: {
-    defaultGoalDate: "2020-06-27T00:00:00.000Z",
+    defaultGoalDate: '2020-06-27T00:00:00.000Z',
     defaultGoalReps: 100,
 
     // how many days until the goal before we show 'reps per day'
@@ -13,8 +13,8 @@ const appData = {
     roundUpReps: false,
     pretendNoKata: false,
   },
-  // kataList: [],
-  kataList: templateKata.testData.kata,
+  kataList: [],
+  // kataList: templateKata.testData.kata,
 };
 
 export default appData;

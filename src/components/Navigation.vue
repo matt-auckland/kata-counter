@@ -34,6 +34,16 @@
   </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    addKata() {
+      console.log("TODO: implement method");
+    },
+  },
+};
+</script>
+
 <style scoped>
 #nav {
   width: 100%;

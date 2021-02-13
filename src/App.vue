@@ -14,6 +14,10 @@ import Navigation from "./components/Navigation";
 
 export default {
   components: { Navigation },
+  beforeMount() {
+    this.$root.kataList = this.$root.getKataStorage();
+    // this.getSettingsStorage()
+  },
 };
 </script>
 

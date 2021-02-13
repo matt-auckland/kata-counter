@@ -1,8 +1,7 @@
 <template>
   <div class="ui-input">
     <label class="flex-label">{{label}}<input
-        @change="updateDate"
-        @input="updateValue($event.target.value)"
+        v-on:input="$emit('input',$event.target.value)"
         :value="value"
         :type="type"
       ></label>
@@ -13,13 +12,9 @@ export default {
   props: {
     label: String,
     type: String,
-    value: String,
+    value: [String, Number, Boolean],
   },
-  methods: {
-    updateValue: function (value) {
-      this.$emit("input", value);
-    },
-  },
+  methods: {},
 };
 </script>
 <style scoped>
