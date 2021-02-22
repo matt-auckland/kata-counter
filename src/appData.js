@@ -11,7 +11,6 @@ const appData = {
 
     // show 2.5 reps per day or 3 reps per day
     roundUpReps: false,
-    pretendNoKata: false,
   },
   kataList: [],
   // kataList: templateKata.testData.kata,

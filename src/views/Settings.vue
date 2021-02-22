@@ -29,6 +29,11 @@
     <UIButton @click.prevent="emitUpdateModal('add-kata', 'Add a new Kata')">Add a new Kata</UIButton>
     <UIButton @click.prevent="emitUpdateModal('edit-tags', 'Edit Tags')">Add or delete tags</UIButton>
     <!-- <UIButton @click.prevent="emitUpdateModal('load-template-data', 'Load Kata from a Template')">Load Kata from a template</UIButton> -->
+    <hr>
+    <UIButton @click.prevent="saveSettings">Save Settings</UIButton>
+    <UIButton @click.prevent="cancelSettings">Discard Changes</UIButton>
+
+    <hr>
     <UIButton @click.prevent="emitUpdateModal('import-json', 'Import back up JSON data')">Import data from JSON</UIButton>
     <UIButton @click.prevent="emitUpdateModal('export-json', 'Back up data as JSON')">Export data as JSON</UIButton>
   </form>

@@ -22,12 +22,13 @@
           placeholder="Enter a kata name here"
           v-model="draftKata.name"
         ></UIInput>
-        <UIInput
-          type="number"
-          name="reps"
-          :label="'Repetitions:'"
-          v-model.number="draftKata.reps"
-        ></UIInput>
+
+        <UIBubble>
+          <span>
+            Repetitions:
+          </span>
+          <span slot="right">{{draftKata.reps}}</span>
+        </UIBubble>
         <UIInput
           type="checkbox"
           id="defaultReps"
@@ -67,9 +68,6 @@
           ></div>
         </div>
 
-        <!-- <UIButton @click="saveKata">Save</UIButton> -->
-        <!-- <UIButton @click="cancelEdit">Cancel</UIButton> -->
-
         <div class="tag-pool">
           <div class="tag-pool-title">Kata Tags<span v-if="tagPool && tagPool.length">, tap to select</span></div>
           <span
@@ -87,10 +85,11 @@
 
         <UIButton @click="routeAndAddTag">Create new Kata Tag</UIButton>
 
+        <hr>
         <UIButton @click="saveKata">Save Changes</UIButton>
 
         <UIButton @click="cancelEdit">Discard Edits</UIButton>
-
+        <hr>
         <UIButton @click="deleteKata">Delete Kata</UIButton>
       </form>
     </template>
@@ -107,15 +106,19 @@
           <th>Reps</th>
           <th>Date</th>
           <th>Time</th>
+          <th></th>
           <tr
-            v-for="entry in kataHistoryReversed"
-            :key="entry.date + entry.time + entry.count"
+            v-for="(entry, i) in kataHistoryReversed"
+            :key="entry.date + entry.time + entry.total"
           >
             <td>
-              {{entry.count}}
+              {{entry.total}}
             </td>
             <td>{{entry.date}}</td>
             <td>{{entry.time}}</td>
+            <td>
+              <UIButton @click="deleteKataRep(i)">Delete</UIButton>
+            </td>
           </tr>
         </table>
       </div>
@@ -128,6 +131,7 @@
 import moment from "moment";
 import UIButton from "../components/UI-Button";
 import UIInput from "../components/UI-Input.vue";
+import UIBubble from "../components/UI-Bubble.vue";
 
 export default {
   props: {
@@ -135,7 +139,7 @@ export default {
       type: Array,
     },
   },
-  components: { UIButton, UIInput },
+  components: { UIButton, UIInput, UIBubble },
   methods: {
     selectTab(tabName) {
       this.tab = tabName;
@@ -143,6 +147,25 @@ export default {
     },
     cancelEdit() {
       this.$router.push("/");
+    },
+    deleteKataRep(repIndex) {
+      // reduce reps by count of rep
+      this.draftKata.reps -= this.kataHistoryReversed[repIndex].count;
+      // find index of rep
+      const indexToRemove = this.draftKata.history.length - 1 - repIndex;
+
+      // update all following reps 'total' by decrementing the count of removed rep
+      this.draftKata.history.forEach((item, i) => {
+        if (i > indexToRemove)
+          item.total -= this.kataHistoryReversed[repIndex].count;
+      });
+      // remove rep
+      this.draftKata.history = this.draftKata.history.filter((entry, i) => {
+        return indexToRemove !== i;
+      });
+
+      //save kata
+      this.saveKata(false);
     },
     saveKata(returnHome = true) {
       this.disableForm = true;
@@ -204,6 +227,7 @@ export default {
   data() {
     return {
       disableForm: false,
+      // changesDetected: false,
       tab: "edit",
       draftKata: {
         name: "",
@@ -216,6 +240,7 @@ export default {
         colour: "white",
         tags: [],
         id: Date.now(),
+        history: [],
       },
       colours: [
         "purple",
@@ -241,20 +266,35 @@ export default {
       ],
     };
   },
+  // watch: {
+  //   draftKata: {
+  //     deep: true,
+  //     handler(newVal, oldVal) {
+  //       const ctrl = this;
+  //       // if (oldVal.name === "") return;
+  //       Object.keys(newVal).forEach((key) => {
+  //         console.log(
+  //           `${key}, ${newVal[key]}, ${oldVal[key]} .`,
+  //           newVal[key] != oldVal[key]
+  //         );
+  //         if (newVal[key] != oldVal[key]) ctrl.changesDetected = true;
+  //       });
+  //     },
+  //   },
+  // },
   computed: {
     kataHistoryReversed() {
       if (!this.draftKata.history) return [];
-      let reversed = this.draftKata.history
+      return [...this.draftKata.history]
         .map((e) => {
-          e.time = moment(e.date).format("HH:mm:ss");
-          e.date = moment(e.date).format("D/MM/YYYY");
-          return e;
+          return {
+            time: moment(e.date).format("HH:mm:ss"),
+            date: moment(e.date).format("D/MM/YYYY"),
+            count: e.count,
+            total: e.total,
+          };
         })
         .reverse();
-      return reversed;
-    },
-    kataHistoryShort() {
-      return this.kataHistoryReversed.slice(0, 10);
     },
   },
 };
@@ -291,7 +331,7 @@ export default {
 
 .list-cont {
   overflow-y: scroll;
-  height: calc(100% - 60px);
+  max-height: calc(100vh - 100px);
   border-bottom: 1px solid #000;
 }
 

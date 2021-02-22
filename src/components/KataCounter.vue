@@ -37,7 +37,11 @@ export default {
         this.kata.history = [];
       }
 
-      this.kata.history.push({ date: moment(), count: this.kata.reps });
+      this.kata.history.push({
+        date: moment(),
+        count: 1,
+        total: this.kata.reps,
+      });
     },
   },
   computed: {
@@ -71,7 +75,7 @@ export default {
       return `${Math.ceil(this.repsRemaining / weeksRemaining)} reps per week`;
     },
     lastUpdatedString() {
-      if (this.kata.history) {
+      if (this.kata?.history?.length) {
         const hist = this.kata.history[this.kata.history.length - 1];
 
         const hoursSinceUpdate = moment().diff(moment(hist.date), "hours");

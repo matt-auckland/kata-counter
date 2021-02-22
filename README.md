@@ -25,8 +25,7 @@ A Cordova App for recording Karate Kata repetitions and goals. It displays how m
 - Get editing of kata working
 - Get import/export of JSON data working
 - Get tags for kata working
-- Allow kata reps to be deleted from history
-  - Allow editing of reps (#, date, etc) eventually
+- Allow editing of reps (#, date, etc) eventually
 - Get adding a new kata working
 - Get settings editing working
 - Add setting around whether to show weeks/days or if the app show pick which to display

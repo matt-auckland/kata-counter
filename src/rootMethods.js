@@ -9,7 +9,7 @@ const rootMethods = {
     const storage = window.localStorage;
 
     storage.setItem('settings', JSON.stringify(settingsData));
-    return JSON.parse(storage.getItem('kata'));
+    return JSON.parse(storage.getItem('settings'));
   },
   getKataStorage() {
     return JSON.parse(window.localStorage.getItem('kata'));

@@ -1,12 +1,15 @@
 <template>
-  <button v-on:click="$emit('click')">
+  <button
+    v-on:click="$emit('click')"
+    :disabled="disabled"
+  >
     <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
-  props: ["clickFunc", "text"],
+  props: ["clickFunc", "text", "disabled"],
 };
 </script>
 
@@ -33,8 +36,10 @@ button:hover {
   cursor: pointer;
 }
 
-button:disabled:hover {
-  border-color: #ccc;
+button:disabled {
+  background: rgba(165, 165, 165, 0.274);
+  color: #fff;
   cursor: initial;
+  border-color: black;
 }
 </style>

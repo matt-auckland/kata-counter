@@ -16,7 +16,7 @@ export default {
   components: { Navigation },
   beforeMount() {
     this.$root.kataList = this.$root.getKataStorage();
-    // this.getSettingsStorage()
+    this.$root.settings = this.$root.getSettingsStorage();
   },
 };
 </script>
